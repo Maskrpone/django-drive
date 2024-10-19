@@ -3,8 +3,8 @@ import os
 
 
 # Create your views here.
-def home(request, path=""):
-    username = "maskrpone"  # Nom d'utilisateur ou récupéré dynamiquement
+def home(request, path="", username="maskrpone"):
+
     base_path = os.path.join("storage", username)
 
     # Construire le chemin complet en combinant le chemin de base avec le sous-dossier

@@ -5,30 +5,12 @@
   </head>
   <body>
     <h1>Liste des fichiers et dossiers pour {{ username }}</h1>
-
-    <!-- Lien pour revenir au dossier parent -->
-    {% if not is_root %}
-    <p>
-      <a href="{% url 'home' path=current_path|cut:'/' %}"
-        >Retour au dossier parent</a
-      >
-    </p>
-    {% endif %} {% if items %}
     <ul>
       {% for item in items %} {% if item.is_dir %}
-      <!-- Si c'est un dossier, rendre le nom cliquable -->
-      <li>
-        <a href="{% url 'home' path=current_path|add:item.name|add:'/' %}"
-          >{{ item.name }}/</a
-        >
-      </li>
+      <li><a href="/{{ username }}/{{ item.name }}">{{ item.name }}</a></li>
       {% else %}
-      <!-- Si c'est un fichier, afficher simplement le nom -->
       <li>{{ item.name }}</li>
       {% endif %} {% endfor %}
     </ul>
-    {% else %}
-    <p>Aucun fichier ou dossier trouvé dans ce répertoire.</p>
-    {% endif %}
   </body>
 </html>
