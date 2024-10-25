@@ -3,7 +3,7 @@
 <html>
   <head>
     <title>Fichiers de {{ username }} - {{ current_path }}</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <script src="{% static 'js/script.js' %}"></script>
   </head>
   <body>
@@ -35,7 +35,7 @@
     </div>
     <div class="title">
       <div class="text">Liste des fichiers et dossiers pour {{ username }}</div>
-      
+
       <div class="btn-flow">
         <i class="fas fa-plus"></i>
       </div>
@@ -52,12 +52,14 @@
           </tr>
         </thead>
         <tbody class="table__body">
+          {% for item in items %}
           <tr>
             <td><i class="file-icon fas fa-folder"></i></td>
-            <td>Photos</td>
-            <td>jack</td>
+            <td>{{ item.name }}</td>
+            <td>{{ username }}</td>
             <td>Yesterday</td>
-            <td><i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
+            <td>
+              <i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
               <ul class="file-menu collapsed">
                 <li>Rename</li>
                 <li>Move</li>
@@ -66,59 +68,23 @@
               </ul>
             </td>
           </tr>
-          <tr>
-            <td><i class="file-icon fas fa-folder"></i></td>
-            <td>Videos</td>
-            <td>melanie</td>
-            <td>Oct 24, Thu</td>
-            <td><i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
-              <ul class="file-menu collapsed">
-                <li>Rename</li>
-                <li>Move</li>
-                <li>Delete</li>
-                <li>Properties</li>
-              </ul></td>
-          </tr>
-          <tr>
-            <td><i class="file-icon fas fa-file-excel"></i></td>
-            <td>Abbeys.xlsx</td>
-            <td>melanie</td>
-            <td>Today, 02:28</td>
-            <td><i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
-              <ul class="file-menu collapsed">
-                <li>Rename</li>
-                <li>Move</li>
-                <li>Delete</li>
-                <li>Properties</li>
-              </ul></td>
-          </tr>
-          <tr>
-            <td><i class="file-icon fas fa-file-image"></i></td>
-            <td>bernulli.jpg</td>
-            <td>jack</td>
-            <td>Oct 28, Mon</td>
-            <td><i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
-              <ul class="file-menu collapsed">
-                <li>View</li>
-                <li>Rename</li>
-                <li>Move</li>
-                <li>Delete</li>
-                <li>Properties</li>
-              </ul></td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
-    </ul>
+
     <p>Click on the "Choose File" button to upload a file:</p>
 
-    {% comment %}<form
-      action="{% url 'upload_file' username current_path %}"
+    <form
+      action="{% if current_path %}{% url 'upload' username current_path %}{% else %}{% url 'upload_root' username %}{% endif %}"
       method="post"
       enctype="multipart/form-data"
     >
-      <input type="file" id="myFile" name="filename" />
-      <input type="submit" />
-    </form>{% endcomment %}
+      {% csrf_token %}
+      <input type="hidden" name="path" value="{{ current_path }}" />
+      <input type="hidden" name="username" value="{{ username }}" />
+      <input type="file" name="filename" />
+      <button type="submit">Upload</button>
+    </form>
   </body>
 </html>
