@@ -5,7 +5,7 @@ import os
 
 MAX_FILE_SIZE = 40 * 1024 * 1024 # 40 Mo en octets
 
-def home(request, path="", username="maskrpone"):
+def home(request, username, path=""):
 
     base_path = os.path.join("storage", username)
     full_path = os.path.join(base_path, path)
