@@ -24,3 +24,6 @@ def home(request, path="", username="maskrpone"):
         "is_root": path == "",
     }
     return render(request, "drive/home.html", context)
+
+def folder_contents(request, username, path):
+    return home(request,path, username)
