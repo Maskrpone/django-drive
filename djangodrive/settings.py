@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -31,12 +30,14 @@ ALLOWED_HOSTS = []
 
 # Storage system
 
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Chemin absolu où seront stockés les fichiers uploadés
 MEDIA_ROOT = os.path.join(BASE_DIR, "storage")
+
+# URL publique de base pour accéder aux fichiers
 MEDIA_URL = "/storage/"
 
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

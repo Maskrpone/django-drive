@@ -1,16 +1,24 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Folder(models.Model):
-    folder_name = models.CharField(max_length=255)
-    parent_folder = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
-    # owner = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    owner = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name="subfolder", on_delete=models.CASCADE)
     
+    def __str__(self):
+        return self.name
+    
+    def path(self):
+        if self.parent:
+            return f'{self.parent.path()}/{self.name}'
+
 class File(models.Model):
-    file_name = models.CharField(max_length=255)
-    parent_folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
-    file_size = models.IntegerField()
-    owner = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    file_type = models.CharField(max_length=50)
+    name = models.CharField(max_length=255)
+    description = models.TextField(default="")
+    file = models.FileField(upload_to="files/")
+    folder = models.ForeignKey(Folder, related_name='files', on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    size = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return self.name

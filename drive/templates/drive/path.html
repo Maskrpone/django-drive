@@ -2,11 +2,48 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Fichiers de {{ username }} - {{ current_path }}</title>
+    <title>Dossier</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <script src="{% static 'js/script.js' %}"></script>
   </head>
   <body>
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumbs">
+      <a href="{% url 'drive' %}">Root</a>
+      {% for key,value in breadcrumbs.items %} {% if key %}
+      <a href="{% url 'drive' value %}">{{ key }}</a>
+      {% endif %} {% endfor %}
+    </div>
+
+    <p>folders : {{ folders }}</p>
+    <p>files : {{ files }}</p>
+    <p>path : {{ current_path }}</p>
+    <span>bread : {{breadcrumbs}}</span>
+    <!-- Subfolders -->
+    <h3>Folders</h3>
+    <ul>
+      {% for folder in folders %}
+      <li>
+        <a href="{% url 'drive' current_path|add:folder|add:'/' %}"
+          >{{ folder }}</a
+        >
+      </li>
+      {% empty %}
+      <li>No folders</li>
+      {% endfor %}
+    </ul>
+
+    <!-- Files -->
+    <h3>Files</h3>
+    <ul>
+      {% for file in files %}
+      <li><a href="{{ file }}">{{ file }}</a></li>
+      {% empty %}
+      <li>No files</li>
+      {% endfor %}
+    </ul>
+
+    {% comment %}
     <div class="header">
       <div class="menu">
         <button class="hamburger">
@@ -34,7 +71,7 @@
       </div>
     </div>
     <div class="title">
-      <div class="text">Liste des fichiers et dossiers pour {{ username }}</div>
+      <div class="text">Drive de {{ username }}</div>
 
       <div class="btn-flow">
         <i class="fas fa-plus"></i>
@@ -55,7 +92,13 @@
           {% for item in items %}
           <tr>
             <td><i class="file-icon fas fa-folder"></i></td>
-            <td>{{ item.name }}</td>
+            <td>
+              {% if item.is_dir %}
+              <a href="{% url 'folder_contents' item.path %}"
+                >{{ item.name }}</a
+              >
+              {% else %} {{ item.name }} {% endif %}
+            </td>
             <td>{{ username }}</td>
             <td>Yesterday</td>
             <td>
@@ -72,19 +115,10 @@
         </tbody>
       </table>
     </div>
-
-    <p>Click on the "Choose File" button to upload a file:</p>
-
-    <form
-      action="{% if current_path %}{% url 'upload' username current_path %}{% else %}{% url 'upload_root' username %}{% endif %}"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %}
-      <input type="hidden" name="path" value="{{ current_path }}" />
-      <input type="hidden" name="username" value="{{ username }}" />
-      <input type="file" name="filename" />
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {{ form.as_p }}
       <button type="submit">Upload</button>
     </form>
+    {% endcomment %}
   </body>
 </html>

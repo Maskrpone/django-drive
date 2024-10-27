@@ -1,31 +1,45 @@
-from django.shortcuts import render
 import os
+from django.conf import settings
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
+from ..models import File, Folder
 
-MAX_FILE_SIZE = 40 * 1024 * 1024 # 40 Mo en octets
-
-def home(request, username, path=""):
-
-    base_path = os.path.join("storage", username)
-    full_path = os.path.join(base_path, path)
+def home(request, path=""):
+    # if folder_id:
+    #     folder = get_object_or_404(Folder, id=folder_id)
+    #     breadcrumbs = get_breadcrumbs(folder)
+    # else:
+    #     folder = None
+    #     breadcrumbs = []
     
-    files_and_dirs = os.listdir(full_path)
+    # folders = Folder.objects.filter(parent=folder)
+    # files = File.objects.filter()
     
-    items = []
-    for item in files_and_dirs:
-        item_full_path = os.path.join(full_path, item)
-        if os.path.isdir(item_full_path):
-            items.append({"name": item, "is_dir": True})
-        else:
-            items.append({"name": item, "is_dir": False})
-
-    context = {
-        "items": items,
-        "current_path": path,
-        "username": username,
-        "is_root": path == "",
-    }
-    return render(request, "drive/home.html", context)
-
-def folder_contents(request, username, path=""):
-    return home(request, path, username)
-
+    base_dir = os.path.join(settings.MEDIA_ROOT, "Hippolyte")
+    folder_path = os.path.join(base_dir, path)
+    
+    if not os.path.exists(folder_path):
+        raise Http404("Dossier non trouvé")
+    
+    folders = [name for name in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, name))]
+    files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
+    breadcrumbs = get_breadcrumbs(path)
+    
+    return render(request, "drive/path.html", {
+        # 'folder': folder,
+        'folders': folders,
+        'files': files,
+        'current_path': f'{path}',
+        'breadcrumbs': breadcrumbs,
+    })
+    
+    
+def get_breadcrumbs(path):
+    path = path.strip().split('/')
+    breadcrumbs = {}
+    accumulated_path = ""
+    for part in path:
+        accumulated_path = f'{os.path.join(accumulated_path, part)}/'
+        breadcrumbs[part] = accumulated_path
+    
+    return breadcrumbs
