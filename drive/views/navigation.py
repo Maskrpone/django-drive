@@ -1,8 +1,8 @@
 import os
 from django.conf import settings
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
-from ..models import File, Folder
+from django.shortcuts import render
+from ..forms import FileUploadForm
 
 def home(request, path=""):
     # if folder_id:
@@ -31,6 +31,7 @@ def home(request, path=""):
         'files': files,
         'current_path': f'{path}',
         'breadcrumbs': breadcrumbs,
+        'form': FileUploadForm
     })
     
     
