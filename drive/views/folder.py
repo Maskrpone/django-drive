@@ -17,8 +17,6 @@ def create_folder(request):
             
             os.makedirs(full_path, exist_ok=True)
             
-            if path == "":
-                redirect("drive_root")
-            else:
-                redirect("drive", path=path)
+            if path:
+                return redirect("drive", path=path)
     return redirect("drive_root")
