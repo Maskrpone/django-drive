@@ -1,32 +1,28 @@
 import os
 from django.conf import settings
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from ..forms import FileUploadForm
+from ..models import Folder
 
 def home(request, path=""):
-    # if folder_id:
-    #     folder = get_object_or_404(Folder, id=folder_id)
-    #     breadcrumbs = get_breadcrumbs(folder)
-    # else:
-    #     folder = None
-    #     breadcrumbs = []
-    
-    # folders = Folder.objects.filter(parent=folder)
-    # files = File.objects.filter()
-    
     base_dir = os.path.join(settings.MEDIA_ROOT, "Hippolyte")
     folder_path = os.path.join(base_dir, path)
     
     if not os.path.exists(folder_path):
         raise Http404("Dossier non trouvé")
     
+    if path:
+        parent_folder = get_object_or_404(Folder, name=path.split('/')[-1])
+    else:
+        parent_folder = get_object_or_404(Folder, name="home")
+    
     folders = [name for name in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, name))]
     files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
     breadcrumbs = get_breadcrumbs(path)
     
     return render(request, "drive/path.html", {
-        # 'folder': folder,
+        'folder_id': parent_folder.name,
         'folders': folders,
         'files': files,
         'current_path': f'{path}',

@@ -14,7 +14,7 @@ def signup_view(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('drive', username=user)  # Redirigez vers une page d'accueil après connexion
+            return redirect('drive')  # Redirigez vers une page d'accueil après connexion
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})

@@ -47,6 +47,7 @@
     <form method="POST" action="{% url 'create_folder' %}">
       {% csrf_token %}
       <input type="hidden" name="current_path" value="{{ current_path }}" />
+      <input type="hidden" name="parent_id" value="{{ folder_id }}" />
       <input type="text" name="folder_name" placeholder="New folder name" />
       <button type="submit">Create Folder</button>
     </form>

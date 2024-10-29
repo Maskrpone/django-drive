@@ -1,6 +1,6 @@
 # myproject/views.py
 
-from django.shortcuts import render
+from django.shortcuts import redirect
 
 def home_view(request):
-    return render(request, 'drive/path.html')
+    return redirect("drive_root")
