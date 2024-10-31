@@ -24,5 +24,6 @@ urlpatterns = [
     path("drive/", include("drive.urls")),
     path("authentication/", include("authentication.urls")),
     path('', home_view, name='drive'),
+    path("account/", include("generate_graph.urls")),
 ]
 
