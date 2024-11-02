@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Métadonnées des Fichiers</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Fichiers de {{ username }}</h1>
+
+    {% if files_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom du Fichier</th>
+                    <th>Taille (en octets)</th>
+                    <th>Dernière Modification</th>
+                    <th>Date de Création</th>
+                    <th>Type de Fichier</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files_data %}
+                    <tr>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.size }}</td>
+                        <td>{{ file.last_modified }}</td>
+                        <td>{{ file.created }}</td>
+                        <td>{{ file.type }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun fichier trouvé pour cet utilisateur.</p>
+    {% endif %}
+</body>
+</html>
