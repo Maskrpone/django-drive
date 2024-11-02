@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import account_info, generate_graph_ajax
 
 urlpatterns = [
-    path('account/', views.account_info, name='account_info'),
+    path('', account_info, name='account_info'),  # URL de la page principale de compte (sans "account/")
+    path('generate_graph/', generate_graph_ajax, name='generate_graph'),  # URL pour l'AJAX
 ]

@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Génération de Graphique</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Génération de Graphique à la Demande</h1>
+    <button id="generate-chart-btn">Générer le Graphique</button>
+
+    <div id="chart-container" style="margin-top: 20px;"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#generate-chart-btn').click(function() {
+                $.ajax({
+                    url: '{% url "generate_graph" %}',
+                    method: 'GET',
+                    success: function(response) {
+                        $('#chart-container').html('<img src="data:image/png;base64,' + response.chart + '" alt="Graphique généré">');
+                    },
+                    error: function() {
+                        alert("Une erreur s'est produite lors de la génération du graphique.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
