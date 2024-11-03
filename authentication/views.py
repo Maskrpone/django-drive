@@ -1,19 +1,27 @@
 # accounts/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf import settings
+from django.http import HttpRequest, HttpResponse
 from drive.models import Folder
 from .forms import SignUpForm
 import os
 
-def signup_view(request):
+def signup_view(request: HttpRequest) -> HttpResponse:
+    """This is the view used to create an account."""
     if request.method == 'POST':
         form = SignUpForm(request.POST)
+        
+        # We check that the form is valid
         if form.is_valid():
             form.save()
+            # Retrieve informations
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            
+            # Create a user, stores it and handle sessions
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             create_root_folder(username, user)
@@ -37,7 +45,7 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
 
-def create_root_folder(username: str, user):
+def create_root_folder(username: str, user: User) -> None:
     user_dir = os.path.join(settings.MEDIA_ROOT, username)
     if os.path.exists(user_dir):
         print(f"User {username} directory already exists !")
@@ -46,8 +54,4 @@ def create_root_folder(username: str, user):
     print(f"Creating directory for : {username}")
     os.makedirs(user_dir)
     Folder.objects.create(name=username, owner=user)
-    print("Folder created !")
-        
-    
-    
-    
+    return
