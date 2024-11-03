@@ -1,47 +1,138 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
   <head>
     <title>Dossier</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}" />
     <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <!-- Breadcrumb Navigation -->
     <div class="breadcrumbs">
       <a href="{% url 'drive_root' %}">Root</a>
-      {% for key,value in breadcrumbs.items %} {% if key %}
-      <a href="{% url 'drive' value %}">{{ key }}</a>
-      {% endif %} {% endfor %}
+      {% for key, value in breadcrumbs.items %}
+        {% if key %}
+          <a href="{% url 'drive' value %}">{{ key }}</a>
+        {% endif %}
+      {% endfor %}
     </div>
 
     <p>folders : {{ folders }}</p>
     <p>files : {{ files }}</p>
     <p>path : {{ current_path }}</p>
-    <span>bread : {{breadcrumbs}}</span>
+    <span>bread : {{ breadcrumbs }}</span>
+
     <!-- Subfolders -->
     <h3>Folders</h3>
     <ul>
       {% for folder in folders %}
-      <li>
-        <a href="{% url 'drive' current_path|add:folder|add:'/' %}"
-          >{{ folder }}</a
-        >
-      </li>
+        <li>
+          <a href="{% url 'drive' current_path|add:folder|add:'/' %}">{{ folder }}</a>
+
+          <!-- Icône pour les options du dossier -->
+          <span class="options-icon" data-filepath="{{ current_path|add:folder|add:'/' }}">...</span>
+
+          <!-- Menu déroulant -->
+          <div class="file-menu" id="menu-{{ folder }}">
+            <ul>
+              <li class="delete-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Supprimer</li>
+              <li class="move-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Déplacer</li>
+              <li class="copy-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Copier</li>
+            </ul>
+          </div>
+        </li>
       {% empty %}
-      <li>No folders</li>
+        <li>No folders</li>
       {% endfor %}
     </ul>
 
-    <!-- Files -->
-    <h3>Files</h3>
-    <ul>
-      {% for file in files %}
-      <li><a href="{{ file }}">{{ file }}</a></li>
-      {% empty %}
-      <li>No files</li>
-      {% endfor %}
-    </ul>
+    <!-- HTML pour afficher les options de chaque fichier et dossier -->
+<h3>Files</h3>
+<ul>
+  {% for file in files %}
+    <li>
+      <a href="{{ file }}">{{ file }}</a>
+      <span class="options-icon" data-filepath="{{ file }}">...</span>
+      
+      <!-- Menu déroulant pour les actions -->
+      <div class="file-menu" id="menu-{{ file }}">
+        <ul>
+          <li class="copy-option" data-filepath="{{ file }}">Copier</li>
+          <li class="move-option" data-filepath="{{ file }}">Déplacer</li>
+          <li class="delete-option" data-filepath="{{ file }}">Supprimer</li>
+        </ul>
+      </div>
+    </li>
+  {% empty %}
+    <li>No files</li>
+  {% endfor %}
+</ul>
+
+<!-- Boîte de dialogue pour sélectionner le dossier de destination -->
+<div id="action-modal" style="display: none;">
+  <h3 id="action-title"></h3>
+  <select id="destination-select">
+    {% for folder in folders %}
+      <option value="{{ current_path|add:folder|add:'/' }}">{{ folder }}</option>
+    {% endfor %}
+  </select>
+  <button id="confirm-action">Confirmer</button>
+  <button id="cancel-action">Annuler</button>
+</div>
+
+<script>
+  // Ouvrir le menu d'options
+  $('.options-icon').click(function() {
+    const filepath = $(this).data('filepath');
+    $(`#menu-${filepath}`).toggle();
+  });
+
+  // Copier ou déplacer un fichier sans entrer manuellement le chemin de destination
+  $('.copy-option, .move-option').click(function() {
+    const action = $(this).hasClass('copy-option') ? 'copy' : 'move';
+    const filepath = $(this).data('filepath');
+    const url = action === 'copy' ? '{% url "copy_file_or_folder" %}' : '{% url "move_file_or_folder" %}';
+
+    $('#action-title').text(`Sélectionner le dossier pour ${action}`);
+    $('#action-modal').show();
+
+    // Confirmer l'action
+    $('#confirm-action').off('click').on('click', function() {
+      const destination = $('#destination-select').val();
+      $.post(url, {
+        source_path: filepath,
+        destination_path: destination,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      }, function(response) {
+        alert(response.message);
+        location.reload();
+      });
+    });
+
+    // Annuler l'action
+    $('#cancel-action').click(function() {
+      $('#action-modal').hide();
+    });
+  });
+
+  // Supprimer un fichier ou dossier
+  $('.delete-option').click(function() {
+    const filepath = $(this).data('filepath');
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${filepath} ?`)) {
+      $.post("{% url 'delete_file_or_folder' %}", {
+        filepath: filepath,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      }, function(response) {
+        alert(response.message);
+        location.reload();
+      });
+    }
+  });
+</script>
+
+
 
     <h1>Create a folder</h1>
     <form method="POST" action="{% url 'create_folder' %}">
@@ -53,11 +144,7 @@
     </form>
 
     <h1>Upload a file</h1>
-    <form
-      method="POST"
-      enctype="multipart/form-data"
-      action="{% url 'upload_file' %}"
-    >
+    <form method="POST" enctype="multipart/form-data" action="{% url 'upload_file' %}">
       {% csrf_token %}
       <input type="hidden" name="current_path" value="{{ current_path }}" />
       {{ form.as_p }}
@@ -93,7 +180,6 @@
     </div>
     <div class="title">
       <div class="text">Drive de {{ username }}</div>
-
       <div class="btn-flow">
         <i class="fas fa-plus"></i>
       </div>
@@ -111,27 +197,27 @@
         </thead>
         <tbody class="table__body">
           {% for item in items %}
-          <tr>
-            <td><i class="file-icon fas fa-folder"></i></td>
-            <td>
-              {% if item.is_dir %}
-              <a href="{% url 'folder_contents' item.path %}"
-                >{{ item.name }}</a
-              >
-              {% else %} {{ item.name }} {% endif %}
-            </td>
-            <td>{{ username }}</td>
-            <td>Yesterday</td>
-            <td>
-              <i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
-              <ul class="file-menu collapsed">
-                <li>Rename</li>
-                <li>Move</li>
-                <li>Delete</li>
-                <li>Properties</li>
-              </ul>
-            </td>
-          </tr>
+            <tr>
+              <td><i class="file-icon fas fa-folder"></i></td>
+              <td>
+                {% if item.is_dir %}
+                  <a href="{% url 'folder_contents' item.path %}">{{ item.name }}</a>
+                {% else %}
+                  {{ item.name }}
+                {% endif %}
+              </td>
+              <td>{{ username }}</td>
+              <td>Yesterday</td>
+              <td>
+                <i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
+                <ul class="file-menu collapsed">
+                  <li>Rename</li>
+                  <li>Move</li>
+                  <li>Delete</li>
+                  <li>Properties</li>
+                </ul>
+              </td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
