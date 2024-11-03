@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseBadRequest
 from ..forms import FileUploadForm
+from ..models import Folder
 
 MAX_STORAGE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
@@ -11,14 +12,15 @@ def upload_file(request):
     if request.method == "POST":
         form = FileUploadForm(request.POST, request.FILES)
         path = request.POST.get("current_path")
+        base_dir = os.path.join(settings.MEDIA_ROOT, request.user.username)
+        
         if path:
-           base_dir = os.path.join(settings.MEDIA_ROOT, "Hippolyte")
            folder_path = os.path.join(base_dir, path)
         else:
-           folder_path = os.path.join(settings.MEDIA_ROOT, "Hippolyte")
+           folder_path = base_dir
         
         os.makedirs(folder_path, exist_ok=True)
-        
+
         if form.is_valid():
             uploaded_file = request.FILES["file"]
             if uploaded_file.size > 40 * 1024 * 1024:
