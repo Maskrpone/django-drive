@@ -1,0 +1,108 @@
+/* signup.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Quicksand:wght@300..700&display=swap');
+
+body {
+    background-color: #571dd3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    background: linear-gradient(to right, #571dd3, #ff7830);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 5.5em;
+    margin-top: 10px;
+}
+
+form {
+    background-color: rgba(250, 252, 252, 0.95);
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 50%;
+ 
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease-in-out;
+    margin-top: 3% auto;
+    margin: 3% auto;
+ 
+    
+
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-style: bold;
+    font-size: 0.8em;
+    font-weight: 600 auto;
+    color: #4615b1;
+    
+}
+
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ff7830;
+    border-radius: 50px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #ff7830;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff7830;
+}
+
+a{
+    position: absolute;
+    top: 35px ;
+    right: 30px ;
+    color: white ;
+    text-decoration: none;
+
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-style: bold;
+    font-size: 1em auto;
+    transition: font-size 0.3s ease-in-out;
+    font-weight: 900;
+}
+
+@media (max-width: 600px) {
+a {
+    font-size: 0.5em;
+}
+}  
+
+
+a:hover {
+    color: #ff7830;
+}
+  
+
+
+

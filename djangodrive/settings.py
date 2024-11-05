@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     "drive",
     "authentication",
     "generate_graph",
+    
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
