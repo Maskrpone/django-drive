@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .generate_chart import generate_combined_chart
 
 def account_info(request):
-    return render(request, 'account_info.html')  # Assurez-vous que le template est bien dans templates/
+    return render(request, 'account_info.html')
 
 def generate_graph_ajax(request):
     folder_path = "storage/hippolyte"
