@@ -1,13 +1,14 @@
 import os
 import mimetypes
-from django.shortcuts import redirect, get_list_or_404
+from django.shortcuts import redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest, HttpResponse, HttpRequest
 from ..forms import FileUploadForm
-from drive.models import File
+from drive.models import File, Folder
 from drive.views.folder import get_parent_folder
+from django.utils import timezone
 
 MAX_STORAGE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
@@ -69,6 +70,11 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             if file_type is None:
                 file_type = 'unknown'
             File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
+            
+            parent_folder.number_of_elements += 1
+            parent_folder.last_updated = timezone.now().date()
+            parent_folder.save()
+            
             
         else:
             return HttpResponseBadRequest("Invalid form")
