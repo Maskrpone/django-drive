@@ -92,7 +92,3 @@ def account_info(request):
     
     return render(request, 'account_info.html', {'type_chart': type_graph, 'size_chart': size_graph, 'test': test})
 
-def generate_graph_ajax(request):
-    folder_path = "storage/hippolyte"
-    chart_base64 = generate_combined_chart(folder_path)
-    return JsonResponse({'chart': chart_base64})

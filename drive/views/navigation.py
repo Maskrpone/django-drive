@@ -3,7 +3,8 @@ from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from ..forms import FileUploadForm
-from ..models import Folder
+from ..models import Folder, File
+from drive.views.folder import get_parent_folder
 
 def home(request: HttpRequest, path:str="") -> HttpResponse:
     """This is the base view for navigating through the drive."""
@@ -20,9 +21,26 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     if not os.path.exists(folder_path):
         raise Http404("Dossier non trouvé")
     
+    # we will need it later
+    parent_id = get_parent_folder(folder_path, request.user)
+    
     # We list the content of the current folder 
-    folders = [name for name in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, name))]
-    files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
+    folders_name = [name for name in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, name))]
+
+    folders = []  
+    for folder in folders_name:
+        print(f"parent id {parent_id}")
+        actual_folder = Folder.objects.get(name=folder, parent=parent_id, owner=request.user)
+        
+        folders.append({"name": folder, "elts": actual_folder.number_of_elements, "last_updated": actual_folder.last_updated})
+    
+    files_name = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
+    
+    files = []
+    for file in files_name:
+        actual_file = File.objects.get(name=file, parent=parent_id, owner=request.user)
+        files.append({"name": file, "size": actual_file.size, "date": actual_file.uploaded_at }) 
+    
     breadcrumbs = get_breadcrumbs(path)
     
     return render(request, "drive/path.html", {

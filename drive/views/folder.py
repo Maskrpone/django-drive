@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib.auth.models import User
 from ..models import Folder
@@ -34,14 +34,21 @@ def create_folder(request: HttpRequest) -> HttpResponse:
     return redirect("drive_root")
 
 def get_parent_folder(folder_path: str, owner: User) -> Folder:
+    """This function return with the ID of the parent folder
+
+    Args:
+        folder_path (str): This is supposed to be the path to the folder for which we are looking the ID
+        owner (User): User object
+
+    Returns:
+        Folder: This is the ID of the parent folder
+    """
+    # Construct relative path
     folder_path = folder_path.split('storage/', 1)[-1]
     folder_list = folder_path.strip('/').split('/')
-    base_folder= get_object_or_404(Folder, name=owner.username, owner=owner, parent=None)
-    
+    base_folder = Folder.objects.get(name=owner.username, owner=owner, parent=None)
     current_parent = base_folder
     for folder_name in folder_list[1:]:
-        current_parent = get_object_or_404(Folder, name=folder_name, owner=owner, parent=current_parent)
-    
-    print(f'new parent : {current_parent}')
+        current_parent = Folder.objects.get(name=folder_name, owner=owner, parent=current_parent)
     
     return current_parent
