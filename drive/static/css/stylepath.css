@@ -107,20 +107,35 @@ body {
 .new-button-container {
     position: relative;
     display: inline-block;
+    padding: 10px;
+    float: right;
 }
   
 .new-button {
-    background-color: #0277BD;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+  background-color:#571dd3;
+  color: white;
+  text-align: center;
+  padding: 20px 50px;  
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 20px;
+  gap: 8px; 
 }
-  
+
+.new-button svg {
+  fill: white;
+  width: 15px;
+  height: 15px;
+}
+
+
 .new-button:hover {
-    background-color: #01579B;
+  background-color:#571dd3;
 }
   
 .dropdown-menu {
@@ -339,60 +354,69 @@ body {
     opacity: 0;
 }
   
-  
-  .folder-section {
-    display: flex;
-    flex-direction: column;
+.folder-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .folder-list {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .folder-item {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  width: 150px; /* Adjust the width as needed */
+  text-align: center;
 }
 
 .folder-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
 }
 
-.folder-link .fas.fa-folder {
-    font-weight: 100px; /* Taille de l'icône de dossier */
-    margin-right: 10px;
+.folder-link .fas.fa-folder,
+.folder-link svg {
+ 
+  margin-bottom: 10px;
+  color: #2980b9; /* Change this to your desired color */
 }
 
 .folder-name {
-    display: none; /* Cache le texte du dossier */
-    flex-direction: column;
-    align-items: center;
+  display: block; /* Ensure the folder name is displayed */
+  font-size: 16px; /* Adjust the font size as needed */
+  margin-top: 5px;
 }
 
 .options-icon {
-    margin-left: auto;
-    cursor: pointer;
+  margin-left: auto;
+  cursor: pointer;
+ 
 }
 
 .folder-menu {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
 .folder-item:hover .folder-menu {
-    display: block;
+  display: block;
 }
-  
+
 /* Style pour le conteneur du bouton Nouveau */
 .new-button-container {
   position: relative;
@@ -400,7 +424,7 @@ body {
 }
 
 .new-button {
-  background-color: #0277BD;
+  background-color: #571dd3;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -410,7 +434,7 @@ body {
 }
 
 .new-button:hover {
-  background-color: #01579B;
+  background-color: #7e4fe3;
 }
 
 .dropdown-menu {
