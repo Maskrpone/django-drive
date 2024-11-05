@@ -1,4 +1,5 @@
 import os
+import mimetypes
 from django.shortcuts import redirect, get_list_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -64,7 +65,10 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             fs.save(uploaded_file.name, uploaded_file)
             
             # Database registration
-            File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id)
+            file_type,_ = mimetypes.guess_type(uploaded_file.name)
+            if file_type is None:
+                file_type = 'unknown'
+            File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
             
         else:
             return HttpResponseBadRequest("Invalid form")
@@ -75,4 +79,15 @@ def upload_file(request: HttpRequest) -> HttpResponse:
     return redirect("drive_root")
 
 
-
+def get_user_folder_size(user: User) -> int:
+    """Calculer la taille totale des fichiers dans le dossier de l'utilisateur."""
+    
+    list_files = File.objects.filter(owner=user.id) # We retrieve all the files owned by a specific user
+    
+    # We sum their sizes
+    actual_used_capacity = 0
+    for file in list_files:
+        actual_used_capacity += file.size
+    
+    print(f"actual used space for {user} : {actual_used_capacity}")
+    return actual_used_capacity
