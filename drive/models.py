@@ -14,11 +14,11 @@ class Folder(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=255)
-    # file = models.FileField(upload_to="files/")
     parent = models.ForeignKey(Folder, null=True, blank=True, related_name="parent_folder", on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     size = models.IntegerField(null=False, default=0)
     owner = models.ForeignKey(User, null=True, blank=False, related_name="owner_files", on_delete=models.CASCADE)
+    file_type = models.CharField(max_length=10, null=True)
     
     def __str__(self):
         return self.name

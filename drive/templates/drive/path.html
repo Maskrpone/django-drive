@@ -29,10 +29,19 @@
       </div>
     </div>
 
-    <!-- Conteneur principal pour le contenu -->
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylepath.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+
     <div class="main-container">
-      
-      <!-- Section gauche : dossiers et fichiers -->
+      <!-- Section gauche : Bouton Nouveau avec menu déroulant -->
       <div class="left-section">
         
         <div class="main-container">
@@ -175,6 +184,75 @@
           </ul>
         </div>
 
+    <!-- JavaScript -->
+    <script>
+      // Gestion du menu déroulant "Nouveau"
+      const newButton = document.querySelector('.new-button');
+      const dropdownMenu = document.querySelector('#dropdown-menu');
+      newButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+      });
+      document.addEventListener('click', (e) => {
+        if (!newButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.style.display = 'none';
+        }
+      });
+
+      // Gestion des pop-ups
+      const overlay = document.querySelectorAll('.modal-overlay');
+      const openModalButtons = document.querySelectorAll('.dropdown-item');
+      const closeModalButtons = document.querySelectorAll('.close-button');
+
+      // Ouvre la pop-up
+      openModalButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetModal = button.getAttribute('data-target');
+          document.getElementById(targetModal).style.display = 'block';
+          document.getElementById(targetModal).previousElementSibling.style.display = 'block';
+        });
+      });
+
+      // Ferme la pop-up
+      closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const targetModal = button.getAttribute('data-target');
+          document.getElementById(targetModal).style.display = 'none';
+          document.getElementById(targetModal).previousElementSibling.style.display = 'none';
+        });
+      });
+
+      // Ferme la pop-up en cliquant sur l'overlay
+      overlay.forEach(item => {
+        item.addEventListener('click', () => {
+          item.style.display = 'none';
+          item.nextElementSibling.style.display = 'none';
+        });
+      });
+    </script>
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- INES -->
         <!-- Section des fichiers -->
         <div class="file-section">
     
