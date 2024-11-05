@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.db.models.functions import TruncDate
+from django.db.models import Sum
 from drive.models import File
 from .generate_chart import generate_combined_chart
 import base64
@@ -60,19 +62,24 @@ def generate_user_size_graph(user: User):
     return base64.b64encode(buf.getvalue()).decode('utf-8')
 
 def generate_timeline_graph(user: User):
-    dates = File.objects.filter(owner=user).values_list("uploaded_at", flat=True).distinct()
+     # Truncate the uploaded_at field to the date part and count the number of files for each date
+    files_by_date = File.objects.filter(owner=user).annotate(date=TruncDate('uploaded_at')).values('date').annotate(total_size=Sum("size")).order_by('date')
     
-    file_count = {}
+    # Prepare data for the graph
+    dates = [entry['date'].strftime('%Y-%m-%d') for entry in files_by_date]
+    file_counts = [entry['total_size'] for entry in files_by_date]
     
-    for date in dates:
-        number = File.objects.filter(owner=user, uploaded_at=date).count()
-        
-        if date in file_count:
-            file_count[date] += number
-        else:
-            file_count[date] = number
-
-    return file_count
+    plt.figure(figsize=(7,4))
+    plt.plot(dates, file_counts)
+    plt.xlabel("Date")
+    plt.ylabel("Total size (Mo)")
+    plt.title("Total size of File uploaded over time")
+    
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    plt.close()
+    buf.seek(0)
+    return base64.b64encode(buf.getvalue()).decode('utf-8')
     
 
 def account_info(request):
