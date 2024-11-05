@@ -35,28 +35,100 @@
       <!-- Section gauche : dossiers et fichiers -->
       <div class="left-section">
         
+        <div class="main-container">
+          <!-- Section gauche : Bouton Nouveau avec menu déroulant -->
+          <div class="left-section">
+            <div class="new-button-container">
+              <button class="new-button">Nouveau</button>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <a href="#" class="dropdown-item" data-target="create-folder-modal">Créer un dossier</a>
+                <a href="#" class="dropdown-item" data-target="upload-file-modal">Ajouter un fichier</a>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Pop-up pour Créer un dossier -->
+          <div class="modal-overlay" id="modal-overlay"></div>
+          <div class="modal" id="create-folder-modal">
+            <div class="modal-content">
+              <span class="close-button" data-target="create-folder-modal">&times;</span>
+              <h1>Create a folder</h1>
+              <form method="POST" action="{% url 'create_folder' %}" class="add-folder-form">
+                {% csrf_token %}
+                <input type="hidden" name="current_path" value="{{ current_path }}">
+                <input type="text" name="folder_name" placeholder="New folder name" class="folder-name-input">
+                <button type="submit" class="create-folder-button">Create Folder</button>
+              </form>
+            </div>
+          </div>
+    
+          <!-- Pop-up pour Téléverser un fichier -->
+          <div class="modal-overlay" id="upload-modal-overlay"></div>
+          <div class="modal" id="upload-file-modal">
+            <div class="modal-content">
+              <span class="close-button" data-target="upload-file-modal">&times;</span>
+              <h1>Upload a file</h1>
+              <form method="POST" enctype="multipart/form-data" action="{% url 'upload_file' %}" class="upload-file-form">
+                {% csrf_token %}
+                <input type="hidden" name="current_path" value="{{ current_path }}">
+                {{ form.as_p }}
+                <button type="submit" class="upload-file-button">Upload File</button>
+              </form>
+            </div>
+          </div>
+    
+    <!-- JavaScript -->
+        <script>
+          // Gestion du menu déroulant "Nouveau"
+          const newButton = document.querySelector('.new-button');
+          const dropdownMenu = document.querySelector('#dropdown-menu');
+          newButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+          });
+          document.addEventListener('click', (e) => {
+            if (!newButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+              dropdownMenu.style.display = 'none';
+            }
+          });
+    
+          // Gestion des pop-ups
+          const overlay = document.querySelectorAll('.modal-overlay');
+          const openModalButtons = document.querySelectorAll('.dropdown-item');
+          const closeModalButtons = document.querySelectorAll('.close-button');
+    
+          // Ouvre la pop-up
+          openModalButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+              e.preventDefault();
+              const targetModal = button.getAttribute('data-target');
+              document.getElementById(targetModal).style.display = 'block';
+              document.getElementById(targetModal).previousElementSibling.style.display = 'block';
+            });
+          });
+    
+          // Ferme la pop-up
+          closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+              const targetModal = button.getAttribute('data-target');
+              document.getElementById(targetModal).style.display = 'none';
+              document.getElementById(targetModal).previousElementSibling.style.display = 'none';
+            });
+          });
+    
+          // Ferme la pop-up en cliquant sur l'overlay
+          overlay.forEach(item => {
+            item.addEventListener('click', () => {
+              item.style.display = 'none';
+              item.nextElementSibling.style.display = 'none';
+            });
+          });
+        </script>
 
-      <!-- Section droite : ajout de fichiers et dossiers -->
-      <div class="right-section">
-        <div class="add-folder-section">
-          <h1>Create a folder</h1>
-          <form method="POST" action="{% url 'create_folder' %}" class="add-folder-form">
-            {% csrf_token %}
-            <input type="hidden" name="current_path" value="{{ current_path }}" />
-            <input type="text" name="folder_name" placeholder="New folder name" class="folder-name-input" />
-            <button type="submit" class="create-folder-button">Create Folder</button>
-          </form>
-        </div>
+        
+      
 
-        <div class="upload-file-section">
-          <h1>Upload a file</h1>
-          <form method="POST" enctype="multipart/form-data" action="{% url 'upload_file' %}" class="upload-file-form">
-            {% csrf_token %}
-            <input type="hidden" name="current_path" value="{{ current_path }}" />
-            {{ form.as_p }}
-            <button type="submit" class="upload-file-button">Upload File</button>
-          </form>
-        </div>
+        
       </div>
     </div>
 
@@ -76,11 +148,18 @@
             <td><i class="file-icon fas fa-folder"></i></td>
             <!-- Section des dossiers -->
         <div class="folder-section">
-          <h3>Folders</h3>
+         
           <ul class="folder-list">
+
+            
+
+
             {% for folder in folders %}
               <li class="folder-item">
-                <a href="{% url 'drive' current_path|add:folder|add:'/' %}" class="folder-link">{{ folder }}</a>
+                <a href="{% url 'drive' current_path|add:folder|add:'/' %}" class="folder-link">{{ folder }}
+                  <i class="fas fa-folder"><svg height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m12 1034.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#27ae60"/><path d="m2 2c-1.1046 0-2 0.8954-2 2v5h10v1h14v-5c0-1.1046-0.895-2-2-2h-10.281c-0.346-0.5969-0.979-1-1.719-1h-8z" fill="#27ae60" transform="translate(0 1028.4)"/><path d="m12 1033.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#2ecc71"/></g></svg></i> <!-- Icône de dossier -->
+                  <span class="folder-name">{{ folder }}</span> <!-- Texte du dossier caché -->
+                </a>
                 <span class="options-icon" data-filepath="{{ current_path|add:folder|add:'/' }}">...</span>
                 <div class="folder-menu" id="menu-{{ folder }}">
                   <ul>
@@ -98,7 +177,7 @@
 
         <!-- Section des fichiers -->
         <div class="file-section">
-          <h3>Files</h3>
+    
           <ul class="file-list">
             {% for file in files %}
               <li class="file-item">
