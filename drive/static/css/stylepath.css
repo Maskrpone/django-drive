@@ -249,111 +249,10 @@ body {
     font-style: normal;
     margin-top: 10px;
   }
-  
-/* Styles pour le tableau */
-.table-box .table {
-    width: 100%;
-    margin-top: 1rem;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-    color: #666;
-}
-  
-.table-box .table__head tr th:not(:first-child) {
-    padding-bottom: 1rem;
-    border-bottom: 1px solid grey;
-}
-  
-.table-box .table tr th:nth-child(4),
-.table-box .table tr td:nth-child(4) {
-    width: 10rem;
-    text-align: right;
-}
-  
-.table-box .table tr th:nth-child(5),
-.table-box .table tr td:nth-child(5) {
-    width: 2rem;
-    text-align: center;
-}
-  
-.table-box .table tr th:nth-child(1),
-.table-box .table tr td:nth-child(1) {
-    width: 5rem;
-    text-align: center;
-}
-  
-.table-box .table tr th:nth-child(3),
-.table-box .table tr td:nth-child(3) {
-    width: 7rem;
-    text-align: left;
-}
-  
-.table-box .table tr th:nth-child(2),
-.table-box .table tr td:nth-child(2) {
-    text-align: left;
-}
-  
-.table-box .table__body tr td {
-    padding: 1rem 0.2rem;
-}
-  
-.table-box .table__body tr td:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: 1.4rem;
-}
-  
-.table-box .table__body tr td:first-child::after {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-block;
-    content: '';
-    width: 2em;
-    height: 2em;
-    background: rgba(200, 200, 200, 1);
-    border-radius: 50%;
-}
-  
-.table-box .table__body tr td:last-child {
-    position: relative;
-}
-  
-.table-box .table__body tr td:last-child [data-behavior="file-settings"] {
-    cursor: pointer;
-}
-  
-.table-box .table__body tr td:last-child .file-menu {
-    position: absolute;
-    top: 1em;
-    right: 1.5em;
-    padding: 0;
-    z-index: 10;
-    background: #eee;
-    transition: 0.5s;
-}
-  
-.table-box .table__body tr td:last-child .file-menu li {
-    list-style: none;
-    padding: 0.5em;
-    text-align: right;
-    border: 1px solid #ccc;
-    color: #000;
-    transition: 0.5s;
-}
-  
-.table-box .table__body tr td:last-child .file-menu li:hover {
-    cursor: pointer;
-    background: #ccc;
-}
-  
-.table-box .table__body tr td:last-child .file-menu.collapsed {
-    opacity: 0;
-}
-  
+
+/* Style pour les dossiers */
+ 
+
 .folder-section {
   display: flex;
   flex-wrap: wrap;
@@ -371,9 +270,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1px;
-  width: 150px; /* Adjust the width as needed */
+  margin: 10px;
+  width: 200px; 
   text-align: center;
+  padding-left: 3%;
+  padding-right: 3%;
+  margin-left: 10%;
 }
 
 .folder-link {
@@ -384,30 +286,20 @@ body {
   color: inherit;
 }
 
-.folder-link .fas.fa-folder,
-.svg {
- 
+.folder-link svg {
+  
   margin-bottom: 10px;
-  padding-top: 60%;
 }
 
 .folder-name {
   display: block; /* Ensure the folder name is displayed */
-  font-size: 16px; /* Adjust the font size as needed */
-  margin-top: 1px;
-
-  font-family: "Quicksand", sans-serif;
-  font-optical-sizing: auto;
-  font-style: bold;
-  font-size: 0.8em;
-  font-weight: 600 auto;
-  color: #4615b1;
+  font-size: 14px; /* Adjust the font size as needed */
+  margin-top: 5px;
 }
 
 .options-icon {
   margin-left: auto;
   cursor: pointer;
- 
 }
 
 .folder-menu {
@@ -421,6 +313,74 @@ body {
 }
 
 .folder-item:hover .folder-menu {
+  display: block;
+}
+
+/* Style pour les fichiers */
+
+
+.file-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.file-list {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  width: 150px; /* Adjust the width as needed */
+  text-align: center;
+  padding-left: 3%;
+  padding-right: 3%;
+  margin-left: 10%;
+}
+
+.file-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.file-link svg {
+  width: 48px; /* Adjust the size of the file icon */
+  height: 48px; /* Adjust the size of the file icon */
+  margin-bottom: 10px;
+}
+
+.file-name {
+  display: block; /* Ensure the file name is displayed */
+  font-size: 14px; /* Adjust the font size as needed */
+  margin-top: 5px;
+ 
+}
+
+.options-icon {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.file-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.file-item:hover .file-menu {
   display: block;
 }
 

@@ -133,27 +133,19 @@
     <!-- Section du tableau de fichiers -->
     <div class="table-box">
       <table class="table">
-        <thead class="table__head">
-          <tr>
-            <th></th>
-            <th>Title</th>
-            <th></th>
-          </tr>
-        </thead>
+        
         <tbody class="table__body">
           <!-- Exemple d'éléments de tableau -->
           <tr>
             <td><i class="file-icon fas fa-folder"></i></td>
             <!-- Section des dossiers -->
         <div class="folder-section">
-         
           <ul class="folder-list">
-
             {% for folder in folders %}
               <li class="folder-item">
                 <a href="{% url 'drive' current_path|add:folder|add:'/' %}" class="folder-link">
-                  <i class="fas fa-folder"><?xml version="1.0" ?><svg height="24" version="1.1" width="24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m12 1034.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#2980b9"/><path d="m2 2c-1.1046 0-2 0.8954-2 2v5h10v1h14v-5c0-1.1046-0.895-2-2-2h-10.281c-0.346-0.5969-0.979-1-1.719-1h-8z" fill="#2980b9" transform="translate(0 1028.4)"/><path d="m12 1033.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#3498db"/></g></svg></i> 
-                  <span class="folder-name">{{ folder }}</span> <!-- Texte du dossier caché -->
+                  <?xml version="1.0" ?><svg height="30" version="1.1" width="30" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m12 1034.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#2980b9"/><path d="m2 2c-1.1046 0-2 0.8954-2 2v5h10v1h14v-5c0-1.1046-0.895-2-2-2h-10.281c-0.346-0.5969-0.979-1-1.719-1h-8z" fill="#2980b9" transform="translate(0 1028.4)"/><path d="m12 1033.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#3498db"/></g></svg>
+                  <span class="folder-name">{{ folder }}</span>
                 </a>
                 <span class="options-icon" data-filepath="{{ current_path|add:folder|add:'/' }}"></span>
                 <div class="folder-menu" id="menu-{{ folder }}">
@@ -169,6 +161,8 @@
             {% endfor %}
           </ul>
         </div>
+
+        
 
     <!-- JavaScript -->
     <script>
@@ -219,15 +213,17 @@
     </script>
 
 
-        <!-- INES -->
         <!-- Section des fichiers -->
         <div class="file-section">
     
           <ul class="file-list">
             {% for file in files %}
               <li class="file-item">
-                <a href="{{ file }}" class="file-link">{{ file }}</a>
-                <span class="options-icon" data-filepath="{{ file }}">...</span>
+                <a href="{{ file }}" class="file-link">
+                  <?xml version="1.0" ?><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><rect fill="none" height="256" width="256"/><path d="M168,224H56a8,8,0,0,1-8-8V72a8,8,0,0,1,8-8h80l40,40V216A8,8,0,0,1,168,224Z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><path d="M80,64V40a8,8,0,0,1,8-8h80l40,40V184a8,8,0,0,1-8,8H176" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" x1="88" x2="136" y1="152" y2="152"/><line fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" x1="88" x2="136" y1="184" y2="184"/></svg>
+                  <span class="file-name">{{ file }}</span> 
+                </a>
+                <span class="options-icon" data-filepath="{{ file }}"></span>
                 <div class="file-menu" id="menu-{{ file }}">
                   <ul>
                     <li class="copy-option" data-filepath="{{ file }}">Copier</li>
