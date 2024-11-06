@@ -7,12 +7,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/stylepath.css' %}" />
     <script src="{% static 'js/script.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
     <!-- Bande de navigation supérieure -->
     <div class="header">
       <!-- Breadcrumb Navigation -->
-        <a href="{% url 'drive_root' %}">Home</a>
+        <a href="{% url 'drive_root' %}"><svg class='header-icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg></a>
         {% for key, value in breadcrumbs.items %}
           {% if key %}
             <a href="{% url 'drive' value %}">{{ key }}</a>
@@ -28,109 +26,55 @@
         <i class="fas fa-plus"></i>
       </div>
     </div>
+  </head>
+  <body>
 
     <div class="main-container">
-      <!-- Section gauche : Bouton Nouveau avec menu déroulant -->
       <div class="left-section">
-        
-        <div class="main-container">
-          <!-- Section gauche : Bouton Nouveau avec menu déroulant -->
-          <div class="left-section">
-            <div class="new-button-container">
-              <button class="new-button"><?xml version="1.0" ?><svg style="enable-background:new 0 0 24 24;" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="info"/><g id="icons"><path d="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11S18.1,1,12,1z M17,14h-3v3c0,1.1-0.9,2-2,2s-2-0.9-2-2v-3H7   c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2h3V7c0-1.1,0.9-2,2-2s2,0.9,2,2v3h3c1.1,0,2,0.9,2,2C19,13.1,18.1,14,17,14z" id="add"/></g></svg> Nouveau</button>
-              <div class="dropdown-menu" id="dropdown-menu">
-                <a href="#" class="dropdown-item" data-target="create-folder-modal">Créer un dossier</a>
-                <a href="#" class="dropdown-item" data-target="upload-file-modal">Ajouter un fichier</a>
-              </div>
-            </div>
+        <!-- Bouton Nouveau avec menu déroulant -->
+        <div class="new-button-container">
+          <button class="new-button">
+            <svg style="enable-background:new 0 0 24 24;" viewBox="0 0 24 24">
+              <path d="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11S18.1,1,12,1z M17,14h-3v3c0,1.1-0.9,2-2,2s-2-0.9-2-2v-3H7 c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2h3V7c0-1.1,0.9-2,2-2s2,0.9,2,2v3h3c1.1,0,2,0.9,2,2C19,13.1,18.1,14,17,14z"/>
+            </svg> Nouveau
+          </button>
+          <div class="dropdown-menu" id="dropdown-menu">
+            <a href="#" class="dropdown-item" data-target="create-folder-modal">Créer un dossier</a>
+            <a href="#" class="dropdown-item" data-target="upload-file-modal">Ajouter un fichier</a>
           </div>
-    
-          <!-- Pop-up pour Créer un dossier -->
-          <div class="modal-overlay" id="modal-overlay"></div>
-          <div class="modal" id="create-folder-modal">
-            <div class="modal-content">
-              <span class="close-button" data-target="create-folder-modal">&times;</span>
-              <h1>Create a folder</h1>
-              <form method="POST" action="{% url 'create_folder' %}" class="add-folder-form">
-                {% csrf_token %}
-                <input type="hidden" name="current_path" value="{{ current_path }}">
-                <input type="text" name="folder_name" placeholder="New folder name" class="folder-name-input">
-                <button type="submit" class="create-folder-button">Create Folder</button>
-              </form>
-            </div>
-          </div>
-    
-          <!-- Pop-up pour Téléverser un fichier -->
-          <div class="modal-overlay" id="upload-modal-overlay"></div>
-          <div class="modal" id="upload-file-modal">
-            <div class="modal-content">
-              <span class="close-button" data-target="upload-file-modal">&times;</span>
-              <h1>Upload a file</h1>
-              <form method="POST" enctype="multipart/form-data" action="{% url 'upload_file' %}" class="upload-file-form">
-                {% csrf_token %}
-                <input type="hidden" name="current_path" value="{{ current_path }}">
-                {{ form.as_p }}
-                <button type="submit" class="upload-file-button">Upload File</button>
-              </form>
-            </div>
-          </div>
-    
-    <!-- JavaScript -->
-        <script>
-          // Gestion du menu déroulant "Nouveau"
-          const newButton = document.querySelector('.new-button');
-          const dropdownMenu = document.querySelector('#dropdown-menu');
-          newButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-          });
-          document.addEventListener('click', (e) => {
-            if (!newButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-              dropdownMenu.style.display = 'none';
-            }
-          });
-    
-          // Gestion des pop-ups
-          const overlay = document.querySelectorAll('.modal-overlay');
-          const openModalButtons = document.querySelectorAll('.dropdown-item');
-          const closeModalButtons = document.querySelectorAll('.close-button');
-    
-          // Ouvre la pop-up
-          openModalButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-              e.preventDefault();
-              const targetModal = button.getAttribute('data-target');
-              document.getElementById(targetModal).style.display = 'block';
-              document.getElementById(targetModal).previousElementSibling.style.display = 'block';
-            });
-          });
-    
-          // Ferme la pop-up
-          closeModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-              const targetModal = button.getAttribute('data-target');
-              document.getElementById(targetModal).style.display = 'none';
-              document.getElementById(targetModal).previousElementSibling.style.display = 'none';
-            });
-          });
-    
-          // Ferme la pop-up en cliquant sur l'overlay
-          overlay.forEach(item => {
-            item.addEventListener('click', () => {
-              item.style.display = 'none';
-              item.nextElementSibling.style.display = 'none';
-            });
-          });
-        </script>
-
-        
-      
-
-        
+        </div>
       </div>
-      {% for folder in folders %}
-      <div><a href={% url 'drive' current_path|add:folder.name|add:'/' %}>{{ folder.name }}</a><span>{{ folder.elts }}</span><span>{{ folder.last_updated }}</span></div>
-      {% endfor %} 
+    </div>
+    
+          <!-- Overlay pour les modals -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <!-- Pop-ups pour "Créer un dossier" et "Téléverser un fichier" -->
+    <div class="modal" id="create-folder-modal">
+      <div class="modal-content">
+        <span class="close-button" data-target="create-folder-modal">&times;</span>
+        <h1>Create a folder</h1>
+        <form method="POST" action="{% url 'create_folder' %}" class="add-folder-form">
+          {% csrf_token %}
+          <input type="hidden" name="current_path" value="{{ current_path }}">
+          <input type="text" name="folder_name" placeholder="New folder name" class="folder-name-input">
+          <button type="submit" class="create-folder-button">Create Folder</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="upload-file-modal">
+      <div class="modal-content">
+        <span class="close-button" data-target="upload-file-modal">&times;</span>
+        <h1>Upload a file</h1>
+        <form method="POST" enctype="multipart/form-data" action="{% url 'upload_file' %}" class="upload-file-form">
+          {% csrf_token %}
+          <input type="hidden" name="current_path" value="{{ current_path }}">
+          {{ form.as_p }}
+          <button type="submit" class="upload-file-button">Upload File</button>
+        </form>
+      </div>
+    </div>
+      
     </div>
 
     <!-- Section du tableau de fichiers -->
@@ -146,32 +90,49 @@
           <ul class="folder-list">
             {% for folder in folders %}
               <li class="folder-item">
-                <a href="{% url 'drive' current_path|add:folder|add:'/' %}" class="folder-link">
-                  <?xml version="1.0" ?><svg height="30" version="1.1" width="30" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m12 1034.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#2980b9"/><path d="m2 2c-1.1046 0-2 0.8954-2 2v5h10v1h14v-5c0-1.1046-0.895-2-2-2h-10.281c-0.346-0.5969-0.979-1-1.719-1h-8z" fill="#2980b9" transform="translate(0 1028.4)"/><path d="m12 1033.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#3498db"/></g></svg>
-                  <span class="folder-name">{{ folder }}</span>
+                <a href="{% url 'drive' current_path|add:folder.name|add:'/' %}" class="folder-link">
+                  <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m12 1034.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#2980b9"/><path d="m2 2c-1.1046 0-2 0.8954-2 2v5h10v1h14v-5c0-1.1046-0.895-2-2-2h-10.281c-0.346-0.5969-0.979-1-1.719-1h-8z" fill="#2980b9" transform="translate(0 1028.4)"/><path d="m12 1033.4c0 1.1-0.895 2-2 2h-5-3c-1.1046 0-2 0.9-2 2v8 3c0 1.1 0.89543 2 2 2h20c1.105 0 2-0.9 2-2v-3-10c0-1.1-0.895-2-2-2h-10z" fill="#3498db"/></g></svg>
+                  <span class="folder-name">{{ folder.name }}</span><span class="folder-info">{{folder.elts}}</span><span class ="folder-upd">{{folder.last_updated}}</span> 
                 </a>
-                <span class="options-icon" data-filepath="{{ current_path|add:folder|add:'/' }}"></span>
-                <div class="folder-menu" id="menu-{{ folder }}">
-                  <ul>
-                    <li class="delete-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Supprimer</li>
-                    <li class="move-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Déplacer</li>
-                    <li class="copy-option" data-filepath="{{ current_path|add:folder|add:'/' }}">Copier</li>
-                  </ul>
+                <div class="options-menu">
+                  <button class="optionsbutton">...</button>
+                  <div class="dropdown-menuo" id="dropdown-menuo">
+                    <a href="#" class="dropdown-item2" data-target="duplicate-modal">Duplicate</a>
+                    <a href="#" class="dropdown-item2" data-target="move-modal">Move</a>
+                    <a href="#" class="dropdown-item2" data-target="delete-modal">Delete</a>
+                  </div>
                 </div>
               </li>
             {% empty %}
-              <li class="no-folder">No folders</li>
+              <li class="no-folder"></li>
             {% endfor %}
           </ul>
         </div>
+        <!-- Modals pour "Options" -->
+    <div class="modal" id="duplicate-modal">
+      <div class="modal-content">
+        <span class="close-button" data-target="duplicate-modal">&times;</span>
+        <p>Duplicate action</p>
+      </div>
+    </div>
+    <div class="modal" id="move-modal">
+      <div class="modal-content">
+        <span class="close-button" data-target="move-modal">&times;</span>
+        <p>Move action</p>
+      </div>
+    </div>
+    <div class="modal" id="delete-modal">
+      <div class="modal-content">
+        <span class="close-button" data-target="delete-modal">&times;</span>
+        <p>Do you really want to delete ?</p>
+        <button type=" submit" class="delete-button">Delete</button>
+      </div>
+    </div>
 
-        
-
-    <!-- JavaScript -->
     <script>
       // Gestion du menu déroulant "Nouveau"
       const newButton = document.querySelector('.new-button');
-      const dropdownMenu = document.querySelector('#dropdown-menu');
+      const dropdownMenu = document.getElementById('dropdown-menu');
       newButton.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
@@ -182,35 +143,45 @@
         }
       });
 
-      // Gestion des pop-ups
-      const overlay = document.querySelectorAll('.modal-overlay');
-      const openModalButtons = document.querySelectorAll('.dropdown-item');
-      const closeModalButtons = document.querySelectorAll('.close-button');
+      // Gestion du menu déroulant "Options"
+      const optionsButton = document.querySelector('.optionsbutton');
+      const dropdownMenuo = document.getElementById('dropdown-menuo');
+      optionsButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenuo.style.display = dropdownMenuo.style.display === 'block' ? 'none' : 'block';
+      });
+      document.addEventListener('click', (e) => {
+        if (!optionsButton.contains(e.target) && !dropdownMenuo.contains(e.target)) {
+          dropdownMenuo.style.display = 'none';
+        }
+      });
 
-      // Ouvre la pop-up
+      // Gestion des pop-ups
+      const openModalButtons = document.querySelectorAll('.dropdown-item, .dropdown-item2');
+      const closeModalButtons = document.querySelectorAll('.close-button');
+      const overlay = document.getElementById('modal-overlay');
+
       openModalButtons.forEach(button => {
         button.addEventListener('click', (e) => {
           e.preventDefault();
           const targetModal = button.getAttribute('data-target');
           document.getElementById(targetModal).style.display = 'block';
-          document.getElementById(targetModal).previousElementSibling.style.display = 'block';
+          overlay.style.display = 'block';
         });
       });
 
-      // Ferme la pop-up
       closeModalButtons.forEach(button => {
         button.addEventListener('click', () => {
           const targetModal = button.getAttribute('data-target');
           document.getElementById(targetModal).style.display = 'none';
-          document.getElementById(targetModal).previousElementSibling.style.display = 'none';
+          overlay.style.display = 'none';
         });
       });
 
-      // Ferme la pop-up en cliquant sur l'overlay
-      overlay.forEach(item => {
-        item.addEventListener('click', () => {
-          item.style.display = 'none';
-          item.nextElementSibling.style.display = 'none';
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        document.querySelectorAll('.modal').forEach(modal => {
+          modal.style.display = 'none';
         });
       });
     </script>
@@ -223,47 +194,26 @@
             {% for file in files %}
               <li class="file-item">
                 <a href="{{ file.name }}" class="file-link">
-                  <?xml version="1.0" ?><svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><rect fill="none" height="256" width="256"/><path d="M168,224H56a8,8,0,0,1-8-8V72a8,8,0,0,1,8-8h80l40,40V216A8,8,0,0,1,168,224Z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><path d="M80,64V40a8,8,0,0,1,8-8h80l40,40V184a8,8,0,0,1-8,8H176" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><line fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" x1="88" x2="136" y1="152" y2="152"/><line fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="8" x1="88" x2="136" y1="184" y2="184"/></svg>
-                  <span class="file-name">{{ file.name }}</span><span>{{file.size}}ko</span><span>{{file.date}}</span> 
+                  <svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><g transform="translate(0 -1028.4)"><path d="m5 1030.4c-1.1046 0-2 0.9-2 2v8 4 6c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-6-4-4-4c0-1.1-0.895-2-2-2h-4-10z" fill="#bdc3c7"/><g fill="#95a5a6"><path d="m6 1028.4c-0.5523 0-1 0.4-1 1v3c0 0.5 0.4477 1 1 1s1-0.5 1-1v-3c0-0.6-0.4477-1-1-1zm4 0c-0.5523 0-1 0.4-1 1v3c0 0.5 0.4477 1 1 1 0.552 0 1-0.5 1-1v-3c0-0.6-0.448-1-1-1zm4 0c-0.552 0-1 0.4-1 1v3c0 0.5 0.448 1 1 1s1-0.5 1-1v-3c0-0.6-0.448-1-1-1zm4 0c-0.552 0-1 0.4-1 1v3c0 0.5 0.448 1 1 1s1-0.5 1-1v-3c0-0.6-0.448-1-1-1z"/><rect height="1" width="12" x="6" y="1043.4"/><rect height="1" width="12" x="6" y="1040.4"/><rect height="1" width="12" x="6" y="1037.4"/><rect height="1" transform="translate(0 1028.4)" width="4" x="6" y="18"/></g><path d="m5 1032.4c0 0.5 0.4477 1 1 1s1-0.5 1-1h-2zm4 0c0 0.5 0.4477 1 1 1 0.552 0 1-0.5 1-1h-2zm4 0c0 0.5 0.448 1 1 1s1-0.5 1-1h-2zm4 0c0 0.5 0.448 1 1 1s1-0.5 1-1h-2z" fill="#7f8c8d"/><path d="m3 1049.4v1c0 1.1 0.8954 2 2 2h14c1.105 0 2-0.9 2-2v-1c0 1.1-0.895 2-2 2h-14c-1.1046 0-2-0.9-2-2z" fill="#95a5a6"/><g transform="matrix(.70711 .70711 -.70711 .70711 773.22 370.4)"><path d="m-63 1003.4v11.3 0.7 1l2 2 2-2v-1-0.7-11.3h-4z" fill="#ecf0f1"/><path d="m-61 1003.4v15l2-2v-1-0.7-11.3h-2z" fill="#bdc3c7"/><rect fill="#e67e22" height="11" width="4" x="-63" y="1004.4"/><path d="m-61 1000.4c-1.105 0-2 0.9-2 2v1h4v-1c0-1.1-0.895-2-2-2z" fill="#7f8c8d"/><g transform="translate(-7,1)"><path d="m-55.406 1016 1.406 1.4 1.406-1.4h-1.406-1.406z" fill="#34495e"/><path d="m-54 1016v1.4l1.406-1.4h-1.406z" fill="#2c3e50"/></g><path d="m-61 1000.4c-1.105 0-2 0.9-2 2v1h2v-3z" fill="#95a5a6"/><rect fill="#d35400" height="11" width="2" x="-61" y="1004.4"/></g></g></svg>
+                  <span class="file-name">{{ file.name }}</span><span class='file-info'>{{file.size}}ko</span><span class='file-upd'>{{file.date}}</span> 
                 </a>
                 <span class="options-icon" data-filepath="{{ file }}"></span>
-                <div class="file-menu" id="menu-{{ file }}">
-                  <ul>
-                    <li class="copy-option" data-filepath="{{ file }}">Copier</li>
-                    <li class="move-option" data-filepath="{{ file }}">Déplacer</li>
-                    <li class="delete-option" data-filepath="{{ file }}">Supprimer</li>
-                  </ul>
+                <div class="file-menu" id="menu-{{ file }}"></div>
+                  <div class="options-menu">
+                    <button class="optionsbutton">...</button>
+                    <div class="dropdown-menuo" id="dropdown-menuo">
+                      <a href="#" class="dropdown-item2" data-target="duplicate-modal">Duplicate</a>
+                      <a href="#" class="dropdown-item2" data-target="move-modal">Move</a>
+                      <a href="#" class="dropdown-item2" data-target="delete-modal">Delete</a>
+                    </div>
                 </div>
               </li>
             {% empty %}
-              <li class="no-file">No files</li>
+              <li class="no-file"></li>
             {% endfor %}
           </ul>
         </div>
-
       </div>
-            <td><i class="fas fa-ellipsis-v" data-behavior="file-settings"></i>
-              <ul class="file-menu collapsed">
-                <li>Rename</li>
-                <li>Move</li>
-                <li>Delete</li>
-                <li>Properties</li>
-              </ul>
-            </td>
-          </tr>
-          <!-- Ajouter ici d'autres fichiers ou dossiers -->
-        </tbody>
-      </table>
     </div>
-
-    <script>
-      // Gestion du menu d'options
-      $('.options-icon').click(function() {
-        const filepath = $(this).data('filepath');
-        $(`#menu-${filepath}`).toggle();
-      });
-
-      // Autres actions JavaScript ici...
-    </script>
   </body>
 </html>

@@ -6,31 +6,45 @@
     box-sizing: border-box;
 }
   
-body {
-    margin: 0;
-    font-family: sans-serif;
-  }
+
   
  
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    background: linear-gradient(to right, #571dd3, #ff7830);
-    color: white;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: linear-gradient(to right, #571dd3, #ff7830);
+  color: white;
+   
+    
 }
 
-.header a, .header .breadcrumbs {
+
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  
+}
+
+.header a, .header .breadcrumbs{
     color: white;
     padding: 8px;
-    background: #571dd3;
+   
 
   }
   
   .header .menu .hamburger {
     border: none;
     background: transparent;
+   
+}
+
+.header-icon{
+  fill: #ffffff; /* Change this to your desired color */
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
 }
 
 @media (min-width: 1000px) {
@@ -55,6 +69,7 @@ body {
     background: #fff;
     transform: scale(0);
     transition: 0.3s;
+    
 }
 
 .header .menu .nav li:hover::after, 
@@ -102,6 +117,57 @@ body {
         display: none;
     }
 }
+
+/* Conteneur pour le bouton "Options" */
+.options-menu {
+  position: relative; /* Nécessaire pour que le menu s'aligne par rapport au bouton */
+  display: inline-block;
+}
+
+/* Style du bouton "Options" */
+.optionsbutton {
+
+  background-color : white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.optionsbutton:hover {
+  background-color: gray;
+}
+
+
+
+/* Menu déroulant pour le bouton "Options" */
+.dropdown-menuo {
+  display: none; /* Masqué par défaut */
+  position: absolute; /* Pour positionner par rapport à .options-menu */
+  top: 100%; /* Juste en dessous du bouton */
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1;
+  min-width: 150px;
+}
+
+/* Style des éléments du menu déroulant */
+.dropdown-item2 {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.9em;
+}
+
+.dropdown-item2:hover {
+  background-color: #f1f1f1;
+  color: #0277BD;
+}
+
 
 /* Style pour le conteneur du bouton Nouveau */
 .new-button-container {
@@ -257,6 +323,9 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  padding-left: 10%;
+  padding-right: 4%;
+  padding-top: 7%;
 }
 
 .folder-list {
@@ -273,9 +342,9 @@ body {
   margin: 10px;
   width: 200px; 
   text-align: center;
-  padding-left: 3%;
-  padding-right: 3%;
-  margin-left: 10%;
+  margin-bottom: 9%;
+  
+
 }
 
 .folder-link {
@@ -287,7 +356,8 @@ body {
 }
 
 .folder-link svg {
-  
+  width: 15;
+  height: auto;
   margin-bottom: 10px;
 }
 
@@ -295,6 +365,20 @@ body {
   display: block; /* Ensure the folder name is displayed */
   font-size: 14px; /* Adjust the font size as needed */
   margin-top: 5px;
+}
+
+.folder-upd{
+  display: block; /* Ensure the folder name is displayed */
+  font-size: 10px; /* Adjust the font size as needed */
+  margin-top: 5px;
+  color: #ccc;
+}
+
+.folder-info {
+  display: block; /* Ensure the folder name is displayed */
+  margin-top: 5px;
+  font-size: 8px;
+  color: gray;
 }
 
 .options-icon {
@@ -316,13 +400,19 @@ body {
   display: block;
 }
 
+
+
 /* Style pour les fichiers */
 
 
 .file-section {
+
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  padding-left: 10%;
+  padding-right: 4%;
+  
 }
 
 .file-list {
@@ -333,15 +423,16 @@ body {
 }
 
 .file-item {
+  
+
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px;
-  width: 150px; /* Adjust the width as needed */
+  width: 200px; 
   text-align: center;
-  padding-left: 3%;
-  padding-right: 3%;
-  margin-left: 10%;
+  margin-bottom: 9%;
+  
 }
 
 .file-link {
@@ -384,6 +475,19 @@ body {
   display: block;
 }
 
+.file-upd{
+  display: block; /* Ensure the folder name is displayed */
+  font-size: 10px; /* Adjust the font size as needed */
+  margin-top: 5px;
+  color: #ccc;
+}
+
+.file-info {
+  display: block; /* Ensure the folder name is displayed */
+  margin-top: 5px;
+  font-size: 8px;
+  color: gray;
+}
 /* Style pour le conteneur du bouton Nouveau */
 .new-button-container {
   position: relative;
@@ -496,3 +600,4 @@ body {
   cursor: pointer;
   color: #333;
 }
+
