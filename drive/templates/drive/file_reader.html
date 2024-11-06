@@ -6,6 +6,7 @@
     <title>Document</title>
   </head>
   <body>
+    {% comment %}
     <h2>{{ file.name }}</h2>
     <p>Size: {{ file.size }} KB</p>
     <p>Uploaded at: {{ file.uploaded_at }}</p>
@@ -20,6 +21,6 @@
     <embed src="{{ url }}" width="600" height="500" type="application/pdf" />
     {% else %}
     <a href="{{ url }}" download>Download {{ file.name }}</a>
-    {% endif %}
+    {% endif %} {% endcomment %} {{file_location}}
   </body>
 </html>

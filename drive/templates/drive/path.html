@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/stylepath.css' %}" />
     <script src="{% static 'js/script.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
 
     <!-- Titre principal -->
   </head>
@@ -125,8 +124,6 @@
       });
     </script>
   </div>
-
-
   
             <!-- Section des dossiers -->
         <div class="folder-section">
@@ -184,7 +181,8 @@
           <ul class="file-list">
             {% for file in files %}
               <li class="file-item">
-                <a href="{{ file.name }}" class="file-link">
+                <a href="{% url 'file_viewer' file.id %}" class="file-link">
+                  
                   <div class="file-frame">
                     {% if file.thumbnail %}
                       <img src="{{ file.thumbnail }}" alt="{{file.name}} icon" class="file-icon">
