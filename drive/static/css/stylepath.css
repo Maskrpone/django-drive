@@ -1,18 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Quicksand:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Quicksand:wght@300..700&display=swap");
 
-
-*, *::after, *::before {
-    box-sizing: border-box;
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
 }
-  
 
-.chart{
+.chart {
   display: block;
-  
- 
 }
- 
 
 .header {
   display: flex;
@@ -20,37 +17,31 @@
   padding: 8px;
   background: linear-gradient(to right, #571dd3, #ff7830);
   color: white;
-    
 }
-
-
 
 body {
   margin: 0;
   font-family: sans-serif;
-  
 }
 
-.header a, .header .breadcrumbs{
-    color: white;
-    padding: 8px;
-   
-
-  }
-  
-  .header .menu .hamburger {
-    border: none;
-    background: transparent;
-   
+.header a,
+.header .breadcrumbs {
+  color: white;
+  padding: 8px;
 }
 
-.header-icon{
+.header .menu .hamburger {
+  border: none;
+  background: transparent;
+}
+
+.header-icon {
   fill: #ffffff; /* Change this to your desired color */
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */
 }
 
-.header-chart{
+.header-chart {
   fill: #ffffff; /* Change this to your desired color */
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */
@@ -58,74 +49,72 @@ body {
 }
 
 @media (min-width: 1000px) {
-    .header .menu .hamburger {
-        display: none;
-    }
+  .header .menu .hamburger {
+    display: none;
+  }
 }
 
 .header .menu .nav li {
-    color: #353554;
-    cursor: pointer;
-    position: relative;
+  color: #353554;
+  cursor: pointer;
+  position: relative;
 }
 
 .header .menu .nav li::after {
-    content: '';
-    display: block;
-    height: 1px;
-    margin-top: 1px;
-    width: 100%;
-    position: absolute;
-    background: #fff;
-    transform: scale(0);
-    transition: 0.3s;
-    
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 1px;
+  width: 100%;
+  position: absolute;
+  background: #fff;
+  transform: scale(0);
+  transition: 0.3s;
 }
 
-.header .menu .nav li:hover::after, 
+.header .menu .nav li:hover::after,
 .header .menu .nav li.active::after {
-    transform: scale(1);
+  transform: scale(1);
 }
 
 .header .menu .nav li.active {
-    color: #fff;
+  color: #fff;
 }
 
 @media (min-width: 1000px) {
-    .header .menu .nav {
-        display: flex;
-    }
-  
-    .header .menu .nav li {
-        list-style: none;
-        margin-left: 1em;
-    }
+  .header .menu .nav {
+    display: flex;
+  }
+
+  .header .menu .nav li {
+    list-style: none;
+    margin-left: 1em;
+  }
 }
 
 @media (max-width: 1000px) {
-    .header .menu .nav.collapsed {
-        display: none;
-    }
+  .header .menu .nav.collapsed {
+    display: none;
+  }
 }
 
 .header .controls {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  align-items: center;
+}
 
-  
-  .header .controls__item:not(:first-child) .icon {
-    margin-left: 2em;
+.header .controls__item:not(:first-child) .icon {
+  margin-left: 2em;
 }
 
 .header .controls__item .text {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 @media (max-width: 1000px) {
-    .header .controls__item .text {
-        display: none;
-    }
+  .header .controls__item .text {
+    display: none;
+  }
 }
 /* Style pour le bouton "Nouveau" */
 .new-button-container {
@@ -137,7 +126,7 @@ body {
 
 .new-button {
   display: flex;
-  align-items: center;  
+  align-items: center;
   justify-content: center;
   background-color: #571dd3;
   color: white;
@@ -160,13 +149,14 @@ body {
 }
 
 /* Style des menus déroulants */
-.dropdown-menu{
-right: 5.5%;
+.dropdown-menu {
+  right: 5.5%;
 }
-.dropdown-menu, .dropdown-menuo {
+.dropdown-menu,
+.dropdown-menuo {
   display: none;
   position: absolute;
-  top: calc(100% );
+  top: calc(100%);
   background-color: white;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
@@ -175,7 +165,8 @@ right: 5.5%;
   min-width: 150px;
 }
 
-.dropdown-item, .dropdown-item2 {
+.dropdown-item,
+.dropdown-item2 {
   display: block;
   padding: 10px;
   text-decoration: none;
@@ -183,9 +174,10 @@ right: 5.5%;
   font-size: 0.9em;
 }
 
-.dropdown-item:hover, .dropdown-item2:hover {
+.dropdown-item:hover,
+.dropdown-item2:hover {
   background-color: #f1f1f1;
-  color: #0277BD;
+  color: #0277bd;
 }
 
 /* Styles communs pour les pop-ups */
@@ -225,23 +217,25 @@ right: 5.5%;
 }
 
 .modal-content .delete-button {
-background-color: #0277BD;
-color: white;
-padding: 10px 20px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-weight: bold;
-width: 100%; /* S'assure que le bouton occupe toute la largeur */
-margin-top: 15px; /* Espace au-dessus pour une séparation visuelle */
+  background-color: #0277bd;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%; /* S'assure que le bouton occupe toute la largeur */
+  margin-top: 15px; /* Espace au-dessus pour une séparation visuelle */
 }
 
 .modal-content .delete-button:hover {
-background-color: #01579B;
+  background-color: #01579b;
 }
 
-
-.folder-name-input, .create-folder-button, .upload-file-button, .delete-button {
+.folder-name-input,
+.create-folder-button,
+.upload-file-button,
+.delete-button {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -249,15 +243,19 @@ background-color: #01579B;
   margin-bottom: 15px;
 }
 
-.create-folder-button, .upload-file-button, .delete-button {
-  background-color: #0277BD;
+.create-folder-button,
+.upload-file-button,
+.delete-button {
+  background-color: #0277bd;
   color: white;
   cursor: pointer;
   font-weight: bold;
 }
 
-.create-folder-button:hover, .upload-file-button:hover, .delete-button:hover {
-  background-color: #01579B;
+.create-folder-button:hover,
+.upload-file-button:hover,
+.delete-button:hover {
+  background-color: #01579b;
 }
 
 /* Bouton de fermeture */
@@ -272,75 +270,69 @@ background-color: #01579B;
 
 /* Conteneur pour le bouton "Options" */
 .options-menu {
-position: relative; /* Nécessaire pour que le menu s'aligne par rapport au bouton */
-display: inline-block;
+  position: relative; /* Nécessaire pour que le menu s'aligne par rapport au bouton */
+  display: inline-block;
 }
 
 /* Style du bouton "Options" */
 .optionsbutton {
-
-background-color : white;
-color: black;
-border: none;
-cursor: pointer;
-font-weight: bold;
+  background-color: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .optionsbutton:hover {
-background-color: gray;
+  background-color: gray;
 }
-
-
 
 /* Menu déroulant pour le bouton "Options" */
 .dropdown-menuo {
-display: none; /* Masqué par défaut */
-position: absolute; /* Pour positionner par rapport à .options-menu */
-top: 100%; /* Juste en dessous du bouton */
-left: 0;
-background-color: white;
-box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-border-radius: 4px;
-overflow: hidden;
-z-index: 1;
-min-width: 150px;
+  display: none; /* Masqué par défaut */
+  position: absolute; /* Pour positionner par rapport à .options-menu */
+  top: 100%; /* Juste en dessous du bouton */
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1;
+  min-width: 150px;
 }
 
 /* Style des éléments du menu déroulant */
 .dropdown-item2 {
-display: block;
-padding: 10px 20px;
-text-decoration: none;
-color: #333;
-font-size: 0.9em;
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.9em;
 }
 
 .dropdown-item2:hover {
-background-color: #f1f1f1;
-color: #0277BD;
+  background-color: #f1f1f1;
+  color: #0277bd;
 }
 
 /* Style pour le titre principal */
 .title {
-    position: relative;
-    padding: 2em 4em;
-    background: linear-gradient(to right, #571dd3, #ff7830);
+  position: relative;
+  padding: 2em 4em;
+  background: linear-gradient(to right, #571dd3, #ff7830);
+}
 
-  }
-  
-  .title .text {
-    
-    font-size: 3em;
-    color: whitesmoke;
-    margin-bottom: 20px;
-    text-align: left;
-    font-family: "Alfa Slab One", serif;
-    font-style: normal;
-    margin-top: 10px;
-  }
+.title .text {
+  font-size: 3em;
+  color: whitesmoke;
+  margin-bottom: 20px;
+  text-align: left;
+  font-family: "Alfa Slab One", serif;
+  font-style: normal;
+  margin-top: 10px;
+}
 
 /* Style pour les dossiers */
- 
 
 .folder-section {
   display: flex;
@@ -363,11 +355,9 @@ color: #0277BD;
   flex-direction: column;
   align-items: center;
   margin: 10px;
-  width: 200px; 
+  width: 200px;
   text-align: center;
   margin-bottom: 9%;
-  
-
 }
 
 .folder-link {
@@ -390,7 +380,7 @@ color: #0277BD;
   margin-top: 5px;
 }
 
-.folder-upd{
+.folder-upd {
   display: block; /* Ensure the folder name is displayed */
   font-size: 10px; /* Adjust the font size as needed */
   margin-top: 5px;
@@ -423,19 +413,14 @@ color: #0277BD;
   display: block;
 }
 
-
-
 /* Style pour les fichiers */
 
-
 .file-section {
-
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   padding-left: 10%;
   padding-right: 4%;
-  
 }
 
 .file-list {
@@ -446,20 +431,19 @@ color: #0277BD;
 }
 
 .file-item {
-  
-
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px;
-  width: 200px; 
+  width: 200px;
   text-align: center;
   margin-bottom: 9%;
-  
 }
 
 .file-link {
+  border: 6px solid #ccc;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   align-items: center;
   text-decoration: none;
@@ -475,8 +459,7 @@ color: #0277BD;
 .file-name {
   display: block; /* Ensure the file name is displayed */
   font-size: 14px; /* Adjust the font size as needed */
-  margin-top: 5px;
- 
+  padding-top: 20px;
 }
 
 .options-icon {
@@ -498,7 +481,7 @@ color: #0277BD;
   display: block;
 }
 
-.file-upd{
+.file-upd {
   display: block; /* Ensure the folder name is displayed */
   font-size: 10px; /* Adjust the font size as needed */
   margin-top: 5px;
@@ -513,7 +496,7 @@ color: #0277BD;
 }
 
 .file-frame {
-  border: 6px solid #ccc; /* Couleur et épaisseur de la bordure */
+  /* border: 6px solid #ccc; Couleur et épaisseur de la bordure */
   border-radius: 20px; /* Bord arrondi */
   padding: 10px; /* Espace intérieur */
   display: flex;
@@ -522,8 +505,8 @@ color: #0277BD;
   width: 150px; /* Largeur du cadre */
   height: 110px; /* Hauteur du cadre */
   margin-bottom: 10px; /* Espace sous le cadre */
-  
 }
+
 /* Style pour le conteneur du bouton Nouveau */
 .new-button-container {
   position: relative;
@@ -566,7 +549,7 @@ color: #0277BD;
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
-  color: #0277BD;
+  color: #0277bd;
 }
 
 /* Styles communs pour les pop-ups */
@@ -605,7 +588,8 @@ color: #0277BD;
   margin-bottom: 15px;
 }
 
-.folder-name-input, .upload-file-button {
+.folder-name-input,
+.upload-file-button {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -613,8 +597,9 @@ color: #0277BD;
   margin-bottom: 15px;
 }
 
-.create-folder-button, .upload-file-button {
-  background-color: #0277BD;
+.create-folder-button,
+.upload-file-button {
+  background-color: #0277bd;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -623,8 +608,9 @@ color: #0277BD;
   font-weight: bold;
 }
 
-.create-folder-button:hover, .upload-file-button:hover {
-  background-color: #01579B;
+.create-folder-button:hover,
+.upload-file-button:hover {
+  background-color: #01579b;
 }
 
 /* Bouton de fermeture */
@@ -636,9 +622,3 @@ color: #0277BD;
   cursor: pointer;
   color: #333;
 }
-
-
-
-    
-
-   

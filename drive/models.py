@@ -24,3 +24,11 @@ class File(models.Model):
     
     def __str__(self):
         return self.name
+    
+class Thumbnail(models.Model):
+    file = models.ForeignKey(File, related_name="thumbnails", on_delete=models.CASCADE)
+    image = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Thumbnail for {self.file.name}'

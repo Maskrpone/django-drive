@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 # Chemin absolu où seront stockés les fichiers uploadés
 MEDIA_ROOT = os.path.join(BASE_DIR, "storage")
 
+THUMBNAILS_URL = '/thumbnails/'
+THUMBNAILS_ROOT = os.path.join(BASE_DIR, 'thumbnails')
+
 # URL publique de base pour accéder aux fichiers
 MEDIA_URL = "/storage/"
 
