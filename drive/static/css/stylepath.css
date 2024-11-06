@@ -17,6 +17,48 @@
   padding: 8px;
   background: linear-gradient(to right, #571dd3, #ff7830);
   color: white;
+  padding-right: auto;
+}
+
+
+.header-icon {
+  fill: #ffffff; /* Change this to your desired color */
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: block;
+
+  
+}
+
+.header-chart {
+  fill: #ffffff; /* Change this to your desired color */
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: block;
+  margin-left: 1000px;
+  
+}
+
+.breadcrumb-key {
+  display: inline; /* Change display to inline to keep elements in the same line */
+  font-weight: bold; 
+  font-size: 1.0em; 
+  text-decoration: none;
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-style: bold;
+  color: #f8f7fc;
+
+ 
+}
+
+.breadcrumb-key::after {
+  content: '>'; /* Ajoute un séparateur après chaque élément */
+  color: #f8f7fc; 
+}
+
+.breadcrumb-key:last-child::after {
+  content: ''; /* Supprime le séparateur après le dernier élément */
 }
 
 body {
@@ -24,79 +66,13 @@ body {
   font-family: sans-serif;
 }
 
-.header a,
-.header .breadcrumbs {
-  color: white;
-  padding: 8px;
-}
 
-.header .menu .hamburger {
-  border: none;
-  background: transparent;
-}
-
-.header-icon {
-  fill: #ffffff; /* Change this to your desired color */
-  width: 24px; /* Adjust the size as needed */
-  height: 24px; /* Adjust the size as needed */
-}
-
-.header-chart {
-  fill: #ffffff; /* Change this to your desired color */
-  width: 24px; /* Adjust the size as needed */
-  height: 24px; /* Adjust the size as needed */
-  display: flex;
-}
-
-@media (min-width: 1000px) {
-  .header .menu .hamburger {
-    display: none;
-  }
-}
-
-.header .menu .nav li {
-  color: #353554;
-  cursor: pointer;
-  position: relative;
-}
-
-.header .menu .nav li::after {
-  content: "";
-  display: block;
-  height: 1px;
-  margin-top: 1px;
-  width: 100%;
-  position: absolute;
-  background: #fff;
-  transform: scale(0);
-  transition: 0.3s;
-}
 
 .header .menu .nav li:hover::after,
 .header .menu .nav li.active::after {
   transform: scale(1);
 }
 
-.header .menu .nav li.active {
-  color: #fff;
-}
-
-@media (min-width: 1000px) {
-  .header .menu .nav {
-    display: flex;
-  }
-
-  .header .menu .nav li {
-    list-style: none;
-    margin-left: 1em;
-  }
-}
-
-@media (max-width: 1000px) {
-  .header .menu .nav.collapsed {
-    display: none;
-  }
-}
 
 .header .controls {
   display: flex;
