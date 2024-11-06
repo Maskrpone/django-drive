@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "drive",
+    "viewer",
     "authentication",
     "generate_graph",
     

@@ -50,7 +50,7 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
         else:
             thumbnail = None
         
-        files.append({"name": file, "size": actual_file.size, "date": actual_file.uploaded_at, "thumbnail": thumbnail }) 
+        files.append({"name": file, "size": actual_file.size, "date": actual_file.uploaded_at, "thumbnail": thumbnail, "id": actual_file.id }) 
     
     breadcrumbs = get_breadcrumbs(path)
     
