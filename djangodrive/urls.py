@@ -27,7 +27,6 @@ urlpatterns = [
     path("authentication/", include("authentication.urls")),
     path('', home_view, name='drive'),
     path('account/', include('generate_graph.urls')),
-    path('user_files/', include('drive.urls')),
 ]
 
 # Ajouter cette ligne pour servir les fichiers media
