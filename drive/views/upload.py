@@ -1,14 +1,19 @@
 import os
 import mimetypes
+from PIL import Image
+from pdf2image import convert_from_path
+from io import BytesIO
 from django.shortcuts import redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 from django.http import HttpResponseBadRequest, HttpResponse, HttpRequest
 from ..forms import FileUploadForm
-from drive.models import File, Folder
+from drive.models import File, Thumbnail
 from drive.views.folder import get_parent_folder
 from django.utils import timezone
+import uuid
 
 MAX_STORAGE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
@@ -33,15 +38,11 @@ def upload_file(request: HttpRequest) -> HttpResponse:
         path = request.POST.get("current_path") # We get the current path (where we want to place the uploaded file)
         base_dir = os.path.join(settings.MEDIA_ROOT, request.user.username) # We form the root directory of the actual user
         
-        print(f'base_dir : {base_dir}')
-        
         # If our path is different from the root, we constitute it
         if path:
            folder_path = os.path.join(base_dir, path)
         else:
            folder_path = base_dir
-        
-        print(f'path: {path}')
         
         os.makedirs(folder_path, exist_ok=True) # ensures that our target folder exists
         
@@ -69,12 +70,13 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             file_type,_ = mimetypes.guess_type(uploaded_file.name)
             if file_type is None:
                 file_type = 'unknown'
-            File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
+            item = File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
+            
+            create_thumbnail(uploaded_file, item, request.user)
             
             parent_folder.number_of_elements += 1
             parent_folder.last_updated = timezone.now().date()
             parent_folder.save()
-            
             
         else:
             return HttpResponseBadRequest("Invalid form")
@@ -97,3 +99,51 @@ def get_user_folder_size(user: User) -> int:
     
     print(f"actual used space for {user} : {actual_used_capacity}")
     return actual_used_capacity
+
+def create_thumbnail(uploaded_file, file_db: File, user: User):
+    print(f'{file_db.file_type.split("/")[-1]}')
+    if file_db.file_type.split("/")[0] == "image":
+        image = Image.open(uploaded_file)
+        image.thumbnail((150,150))
+        thumb_IO = BytesIO()
+        image.save(thumb_IO, format=image.format)
+
+        random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name}'
+        print(f'random name : {random_name}')
+        
+        while len(Thumbnail.objects.filter(image=random_name)) != 0:
+            random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name}'
+            
+        fs = FileSystemStorage(location=settings.THUMBNAILS_ROOT)
+        fs.save(random_name, ContentFile(thumb_IO.getvalue()))
+        
+        thumbnail = Thumbnail.objects.create(file=file_db, image=random_name)
+        thumbnail.save()
+        return
+    
+    if file_db.file_type.split('/')[-1] == "pdf":
+        parent_path = str(file_db.parent)
+        base_path = os.path.join(settings.MEDIA_ROOT, user.username)
+        full_path = os.path.join(base_path, parent_path)
+        pdf_path = os.path.join(full_path, file_db.name)
+        print(f'{pdf_path}')
+        
+        image = convert_from_path(pdf_path, first_page=0, last_page=1)[0]
+        image.thumbnail((150,150))
+        
+        thumb_IO = BytesIO()
+        image.save(thumb_IO, format='PNG')
+
+        random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png'
+        print(f'random name : {random_name}')
+        
+        while len(Thumbnail.objects.filter(image=random_name)) != 0:
+            random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png'
+            
+        fs = FileSystemStorage(location=settings.THUMBNAILS_ROOT)
+        fs.save(random_name, ContentFile(thumb_IO.getvalue()))
+        
+        thumbnail = Thumbnail.objects.create(file=file_db, image=random_name)
+        thumbnail.save()
+        return
+        

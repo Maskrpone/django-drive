@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from ..forms import FileUploadForm
-from ..models import Folder, File
+from ..models import Folder, File, Thumbnail
 from drive.views.folder import get_parent_folder
 
 def home(request: HttpRequest, path:str="") -> HttpResponse:
@@ -39,7 +39,18 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     files = []
     for file in files_name:
         actual_file = File.objects.get(name=file, parent=parent_id, owner=request.user)
-        files.append({"name": file, "size": actual_file.size, "date": actual_file.uploaded_at }) 
+        if len(Thumbnail.objects.filter(file=actual_file)) == 1:
+            thumbnail_name = Thumbnail.objects.get(file=actual_file).image
+        else:
+            thumbnail_name = None
+        
+        if thumbnail_name != None:
+            thumbnail = f"{settings.THUMBNAILS_URL}{thumbnail_name}"
+            print(f'Path for thumbnail : {thumbnail}')
+        else:
+            thumbnail = None
+        
+        files.append({"name": file, "size": actual_file.size, "date": actual_file.uploaded_at, "thumbnail": thumbnail }) 
     
     breadcrumbs = get_breadcrumbs(path)
     
