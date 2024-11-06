@@ -32,7 +32,7 @@ def generate_types_graph(types: dict):
     labels = list(types.keys())
     values = list(types.values())
 
-    plt.figure(figsize=(7,4))
+    plt.figure(figsize=(5,4))
     plt.bar(labels, values, width=0.4)
     plt.gca().yaxis.get_major_locator().set_params(integer=True)
     plt.xlabel('Formats')
@@ -50,7 +50,7 @@ def generate_user_size_graph(user: User):
     files_size = File.objects.filter(owner=user).values_list('size', flat=True)
     total_size = sum(files_size) / 1024 # in Mo
     
-    plt.figure(figsize=(7,4))
+    plt.figure(figsize=(5,4))
     plt.pie([100 - total_size, total_size], labels=['Free space', 'Used space'], autopct='%1.1f%%')
     plt.title("Espace total utilisé (max 100 Mo)")
     
@@ -69,7 +69,7 @@ def generate_timeline_graph(user: User):
     dates = [entry['date'].strftime('%Y-%m-%d') for entry in files_by_date]
     file_counts = [entry['total_size'] for entry in files_by_date]
     
-    plt.figure(figsize=(7,4))
+    plt.figure(figsize=(5,4))
     plt.plot(dates, file_counts)
     plt.xlabel("Date")
     plt.ylabel("Total size (Mo)")

@@ -7,7 +7,11 @@
 }
   
 
+.chart{
+  display: block;
   
+ 
+}
  
 
 .header {
@@ -16,7 +20,6 @@
   padding: 8px;
   background: linear-gradient(to right, #571dd3, #ff7830);
   color: white;
-   
     
 }
 
@@ -45,6 +48,13 @@ body {
   fill: #ffffff; /* Change this to your desired color */
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */
+}
+
+.header-chart{
+  fill: #ffffff; /* Change this to your desired color */
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: flex;
 }
 
 @media (min-width: 1000px) {
@@ -501,6 +511,19 @@ color: #0277BD;
   font-size: 8px;
   color: gray;
 }
+
+.file-frame {
+  border: 6px solid #ccc; /* Couleur et épaisseur de la bordure */
+  border-radius: 20px; /* Bord arrondi */
+  padding: 10px; /* Espace intérieur */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px; /* Largeur du cadre */
+  height: 110px; /* Hauteur du cadre */
+  margin-bottom: 10px; /* Espace sous le cadre */
+  
+}
 /* Style pour le conteneur du bouton Nouveau */
 .new-button-container {
   position: relative;
@@ -614,3 +637,8 @@ color: #0277BD;
   color: #333;
 }
 
+
+
+    
+
+   
