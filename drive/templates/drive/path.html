@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="modal-overlay" id="modal-overlay"></div>
+    
     <div class="modal" id="upload-file-modal">
       <div class="modal-content">
         <span class="close-button" data-target="upload-file-modal">&times;</span>
@@ -138,11 +138,11 @@
                   <span class="folder-name">{{ folder.name }}</span><span class="folder-info">{{folder.elts}}</span><span class ="folder-upd">{{folder.last_updated}}</span> 
                 </a>
                 <div class="options-menu">
-                  <button class="optionsbutton">...</button>
-                  <div class="dropdown-menuo" id="dropdown-menuo">
-                    <a href="#" class="dropdown-item2" data-target="duplicate-modal">Duplicate</a>
-                    <a href="#" class="dropdown-item2" data-target="move-modal">Move</a>
-                    <a href="#" class="dropdown-item2" data-target="delete-modal">Delete</a>
+                  <button class="optionsbutton" data-id="{{ folder.id }}">...</button>
+                  <div class="dropdown-menuo" id="dropdown-menuo-{{ folder.id }}">
+                    <a href="#" class="dropdown-item2 duplicate-action" data-folder-id="{{ folder.id }}" data-target="duplicate-modal">Duplicate</a>
+                    <a href="#" class="dropdown-item2 move-action" data-folder-id="{{ folder.id }}" data-target="move-modal">Move</a>
+                    <a href="#" class="dropdown-item2 delete-action" data-folder-id="{{ folder.id }}" data-target="delete-modal">Delete</a>
                   </div>
                 </div>
               </li>
@@ -155,41 +155,28 @@
         <!-- Modals pour "Options" -->
     <div class="modal" id="duplicate-modal">
       <div class="modal-content">
-        <span class="close-button" data-target="duplicate-modal">&times;</span>
         <p>Duplicate action</p>
+        <button class="duplicate-button">Confirm Duplicate</button>
+        <button class="cancel-button" onclick="closeModalAndRedirect()">Cancel</button>
       </div>
     </div>
     <div class="modal" id="move-modal">
       <div class="modal-content">
-        <span class="close-button" data-target="move-modal">&times;</span>
         <p>Move action</p>
+        <input type="text" class="move-target-input" placeholder="Enter target path">
+    <button class="move-button">Confirm Move</button>
+    <button class="cancel-button" onclick="closeModalAndRedirect()">Cancel</button>
+    
+    
       </div>
     </div>
     <div class="modal" id="delete-modal">
       <div class="modal-content">
-        <span class="close-button" data-target="delete-modal">&times;</span>
         <p>Do you really want to delete ?</p>
         <button type=" submit" class="delete-button">Delete</button>
+        <button class="cancel-button" onclick="closeModalAndRedirect()">Cancel</button>
       </div>
     </div>
-
-    <script>
-    // Gestion du menu déroulant "Options"
-      const optionsButton = document.querySelector('.optionsbutton');
-      const dropdownMenuo = document.querySelector('.dropdown-menuo');
-      optionsButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdownMenuo.style.display = dropdownMenuo.style.display === 'block' ? 'none' : 'block';
-      });
-      document.addEventListener('click', (e) => {
-        if (!optionsButton.contains(e.target) && !dropdownMenuo.contains(e.target)) {
-          dropdownMenuo.style.display = 'none';
-        }
-      });
-      
-    </script>
-
-    
 
         <!-- Section des fichiers -->
         <div class="file-section">
@@ -214,12 +201,11 @@
                 <span class="options-icon" data-filepath="{{ file }}"></span>
                 <div class="file-menu" id="menu-{{ file }}"></div>
                   <div class="options-menu">
-                    <button class="optionsbutton">...</button>
-                    <div class="dropdown-menuo" id="dropdown-menuo">
+                    <button class="optionsbutton" data-id="{{ folder.id }}">...</button>
+                    <div class="dropdown-menuo" id="dropdown-menuo-{{ folder.id }}">
                       <a href="#" class="dropdown-item2" data-target="duplicate-modal">Duplicate</a>
                       <a href="#" class="dropdown-item2" data-target="move-modal">Move</a>
-                      <a href="#" class="dropdown-item2" data-target="delete-modal">Delete</a>
-                      
+                      <a href="#" class="dropdown-item2 delete-action" data-folder-id="{{ folder.id }}" data-target="delete-modal">Delete</a>
                     </div>
                 </div>
               </li>
@@ -228,6 +214,183 @@
             {% endfor %}
           </ul>
         </div>
+
+        <script>
+          // Fonction pour fermer la pop-up et rediriger vers la page d'accueil
+function closeModalAndRedirect() {
+  // Masque toutes les modales
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.style.display = 'none';
+  });
+  document.getElementById('modal-overlay').style.display = 'none';
+
+  // Redirection vers la page d'accueil
+  window.location.href = "{% url 'drive_root' %}";
+}
+
+
+          
+          // Sélectionner tous les boutons "optionsbutton"
+    document.querySelectorAll('.optionsbutton').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = button.getAttribute('data-id');
+        const dropdownMenu = document.getElementById(`dropdown-menuo-${id}`);
+    
+        // Alterne l'affichage du menu sélectionné
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+    
+    // Ferme le menu si on clique en dehors
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-menuo').forEach(menu => {
+        menu.style.display = 'none';
+      });
+    });
+    
+
+    document.querySelectorAll('.delete-action').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const folderId = button.getAttribute('data-folder-id');
+        // Ouvrir la modale de confirmation de suppression
+        const deleteModal = document.getElementById('delete-modal');
+        deleteModal.style.display = 'block';
+        
+        // Enregistrez l'ID du dossier pour la suppression
+        deleteModal.setAttribute('data-folder-id', folderId);
+      });
+      
+    });
+    
+
+    // Gestion du bouton "Confirmer la suppression" dans la modale
+    document.querySelector('.delete-button').addEventListener('click', () => {
+      const deleteModal = document.getElementById('delete-modal');
+      const folderId = deleteModal.getAttribute('data-folder-id');
+
+      
+      // Ajoutez le token CSRF à l'en-tête de la requête
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      // Faites une requête de suppression en utilisant l'ID du dossier
+      fetch(`/delete-folder/${folderId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrfToken, // CSRF pour sécuriser la requête
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ folder_id: folderId })
+      }).then(response => {
+        if (response.ok) {
+          // Si la suppression réussit, actualisez la page ou retirez l'élément du DOM
+          location.reload();
+        } else {
+          alert('Erreur lors de la suppression');
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+        alert('Erreur lors de la suppression');
+      });
+    
+      // Fermez la modale
+      deleteModal.style.display = 'none';
+    });
+
+    // Gestion de l'action "Duplicate"
+document.querySelectorAll('.duplicate-action').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    const folderId = button.getAttribute('data-folder-id');
+    
+    // Ouvrir la modale de duplication
+    const duplicateModal = document.getElementById('duplicate-modal');
+    duplicateModal.style.display = 'block';
+    
+    // Enregistrez l'ID du dossier pour la duplication
+    duplicateModal.setAttribute('data-folder-id', folderId);
+  });
+});
+
+// Gestion du bouton de confirmation de duplication
+document.querySelector('.duplicate-button').addEventListener('click', () => {
+  const duplicateModal = document.getElementById('duplicate-modal');
+  const folderId = duplicateModal.getAttribute('data-folder-id');
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  // Faites une requête de duplication en utilisant l'ID du dossier
+  fetch(`/duplicate-folder/${folderId}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrfToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ folder_id: folderId })
+  }).then(response => {
+    if (response.ok) {
+      location.reload();
+    } else {
+      alert('Erreur lors de la duplication');
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+    alert('Erreur lors de la duplication');
+  });
+
+  duplicateModal.style.display = 'none';
+});
+
+// Gestion de l'action "Move"
+document.querySelectorAll('.move-action').forEach(button => {
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    const folderId = button.getAttribute('data-folder-id');
+    
+    // Ouvrir la modale de déplacement
+    const moveModal = document.getElementById('move-modal');
+    moveModal.style.display = 'block';
+    
+    // Enregistrez l'ID du dossier pour le déplacement
+    moveModal.setAttribute('data-folder-id', folderId);
+  });
+});
+
+// Gestion du bouton de confirmation de déplacement
+document.querySelector('.move-button').addEventListener('click', () => {
+  const moveModal = document.getElementById('move-modal');
+  const folderId = moveModal.getAttribute('data-folder-id');
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+  // Chemin cible entré par l'utilisateur
+  const targetPath = document.querySelector('.move-target-input').value;
+
+  // Faites une requête de déplacement en utilisant l'ID du dossier et le chemin cible
+  fetch(`/move-folder/${folderId}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrfToken,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ folder_id: folderId, target_path: targetPath })
+  }).then(response => {
+    if (response.ok) {
+      location.reload();
+    } else {
+      alert('Erreur lors du déplacement');
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+    alert('Erreur lors du déplacement');
+  });
+
+  moveModal.style.display = 'none';
+});
+
+
+
+        </script>
+
       </div>
     </div>
   </body>
