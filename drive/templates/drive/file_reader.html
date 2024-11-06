@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>{{ file.name }}</h2>
+    <p>Size: {{ file.size }} KB</p>
+    <p>Uploaded at: {{ file.uploaded_at }}</p>
+    {% if file.file_type.startswith "image" %}
+    <img src="{{ url }}" alt="{{ file.name }}" width="600" />
+    {% elif file.file_type.startswith "video" %}
+    <video width="600" height="400" controls>
+      <source src="{{ url }}" type="{{ file.file_type }}" />
+      Your browser does not support the video tag.
+    </video>
+    {% elif file.file_type == "application/pdf" %}
+    <embed src="{{ url }}" width="600" height="500" type="application/pdf" />
+    {% else %}
+    <a href="{{ url }}" download>Download {{ file.name }}</a>
+    {% endif %}
+  </body>
+</html>

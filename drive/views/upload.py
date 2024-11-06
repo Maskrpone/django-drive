@@ -14,9 +14,11 @@ from drive.models import File, Thumbnail
 from drive.views.folder import get_parent_folder
 from django.utils import timezone
 import uuid
+from django.contrib.auth.decorators import login_required
 
 MAX_STORAGE_LIMIT = 100 * 1024 * 1024  # 100 MB
 
+@login_required
 def get_user_folder_size(user: User) -> int:
     """Calculer la taille totale des fichiers dans le dossier de l'utilisateur."""
     
@@ -30,6 +32,7 @@ def get_user_folder_size(user: User) -> int:
     print(f"actual used space for {user} : {actual_used_capacity}")
     return actual_used_capacity 
 
+@login_required
 def upload_file(request: HttpRequest) -> HttpResponse:
     """This is the view for file uploading"""
     if request.method == "POST":
@@ -123,8 +126,7 @@ def create_thumbnail(uploaded_file, file_db: File, user: User):
     
     if file_db.file_type.split('/')[-1] == "pdf":
         parent_path = str(file_db.parent)
-        base_path = os.path.join(settings.MEDIA_ROOT, user.username)
-        full_path = os.path.join(base_path, parent_path)
+        full_path = os.path.join(settings.MEDIA_ROOT, parent_path)
         pdf_path = os.path.join(full_path, file_db.name)
         print(f'{pdf_path}')
         
