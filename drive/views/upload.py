@@ -55,13 +55,14 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             print(f"uploaded file : {uploaded_file.name}")
             # We check if the file is larger than 40 Mo
             if uploaded_file.size > 40 * 1024 * 1024:
-                return HttpResponseBadRequest("File size exceeds 40MB limit")
+                print("File exceeded 40 MO limit")
+                return redirect('drive_root')
             print(f'passed the size')
             
             # We check if the allocated size (100 Mo) for a user is exceeded or not 
             user_used_capacity = get_user_folder_size(request.user)
             if user_used_capacity + uploaded_file.size > MAX_STORAGE_LIMIT:
-                return HttpResponseBadRequest("Storage limit of 100MB exceeded")
+                return redirect('drive_root')
             
             all_files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
             
