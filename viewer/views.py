@@ -36,5 +36,8 @@ def view_doc(request, id:int):
     else:
         type = 'unknown'
     
+    response = render(request, 'viewer/viewer.html', {'file_location': path, 'metadata': file, 'type': type })
+    response['X-Frame-Options'] = 'ALLOWALL'
+    response['Content-Security-Policy'] = "frame-ancestors 'self'"
     
-    return render(request, 'viewer/viewer.html', {'file_location': path, 'metadata': file, 'type': type })
+    return response

@@ -62,23 +62,28 @@ def generate_user_size_graph(user: User):
     return base64.b64encode(buf.getvalue()).decode('utf-8')
 
 def generate_timeline_graph(user: User):
-     # Truncate the uploaded_at field to the date part and count the number of files for each date
-    files_by_date = File.objects.filter(owner=user).annotate(date=TruncDate('uploaded_at')).values('date').annotate(total_size=Sum("size")).order_by('date')
+    # Truncate the uploaded_at field to the date part and count the number of files for each date
     
+    # files_by_date = File.objects.filter(owner=user).order_by('uploaded_at')
+    files_by_date = files_by_date.annotate(date=TruncDate('uploaded_at')).values('date').annotate(total_size=Sum('size')).order_by('date')
+    print(files_by_date)
     # Prepare data for the graph
     dates = [entry['date'].strftime('%Y-%m-%d') for entry in files_by_date]
-    file_counts = [entry['total_size'] for entry in files_by_date]
+    file_sizes = [entry['total_size'] for entry in files_by_date]
     
     plt.figure(figsize=(5,4))
-    plt.plot(dates, file_counts)
+    plt.plot(dates, file_sizes, marjker='o')
     plt.xlabel("Date")
-    plt.ylabel("Total size (Mo)")
+    plt.ylabel("Total size (MB)")
     plt.title("Total size of File uploaded over time")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     
     buf = BytesIO()
     plt.savefig(buf, format='png')
     plt.close()
     buf.seek(0)
+    
     return base64.b64encode(buf.getvalue()).decode('utf-8')
     
 
@@ -88,7 +93,7 @@ def account_info(request):
     
     size_graph = generate_user_size_graph(request.user)
     
-    test = generate_timeline_graph(request.user)
+    # test = generate_timeline_graph(request.user)
     
-    return render(request, 'account_info.html', {'type_chart': type_graph, 'size_chart': size_graph, 'test': test})
+    return render(request, 'account_info.html', {'type_chart': type_graph, 'size_chart': size_graph})
 
