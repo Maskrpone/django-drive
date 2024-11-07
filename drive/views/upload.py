@@ -158,11 +158,11 @@ def create_thumbnail(file_db: File, user: User, folder_path: str, uploaded_file=
         thumb_IO = BytesIO()
         image.save(thumb_IO, format='PNG')
 
-        random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png'
+        random_name = f"thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png"
         print(f'random name : {random_name}')
         
         while len(Thumbnail.objects.filter(image=random_name)) != 0:
-            random_name = f'thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png'
+            random_name = f"thumb_{uuid.uuid4().hex}_{uploaded_file.name.split('.')[0]}.png"
             
         fs = FileSystemStorage(location=settings.THUMBNAILS_ROOT)
         fs.save(random_name, ContentFile(thumb_IO.getvalue()))
