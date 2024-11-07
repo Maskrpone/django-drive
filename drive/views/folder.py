@@ -44,8 +44,11 @@ def get_parent_folder(folder_path: str, owner: User) -> Folder:
         Folder: This is the ID of the parent folder
     """
     # Construct relative path
-    folder_path = folder_path.split('storage/', 1)[-1]
-    folder_list = folder_path.strip('/').split('/')
+    folder_path = folder_path.split('storage' + os.sep, 1)[-1]
+    folder_path = os.path.normpath(folder_path)
+    folder_list = folder_path.split(os.sep)
+    print(f'folder list : {folder_list}')
+    
     base_folder = Folder.objects.get(name=owner.username, owner=owner, parent=None)
     current_parent = base_folder
     for folder_name in folder_list[1:]:

@@ -39,6 +39,7 @@ def upload_file(request: HttpRequest) -> HttpResponse:
         print(f"test")
         form = FileUploadForm(request.POST, request.FILES) # We get the form to check if it is valid
         path = request.POST.get("current_path") # We get the current path (where we want to place the uploaded file)
+        print(f"path : {path}")
         base_dir = os.path.join(settings.MEDIA_ROOT, request.user.username) # We form the root directory of the actual user
         print(f"base dir : {base_dir}")
         # If our path is different from the root, we constitute it
@@ -75,6 +76,7 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             parent_folder = get_parent_folder(folder_path, request.user)
             size = uploaded_file.size / 1024 # Get the size in Ko
             
+            print(f"folder path : {folder_path}")
             fs = FileSystemStorage(location=folder_path)
             fs.save(uploaded_file.name, uploaded_file)
             

@@ -16,17 +16,21 @@ def view_doc(request, id:int):
             current_file = current_file.parent
     except File.DoesNotExist:
         print("File does not exist")
-        
+    
+    print(f"folder_infos : {folder_infos}")
     file_path = ""
     for folder in reversed(folder_infos):
         file_path = os.path.join(file_path, folder)
+        file_path = os.path.normpath(file_path)
     
     print(f"file_path : {file_path}")
     full_path = os.path.join(settings.MEDIA_URL, file_path)
     print(f"full_path : {full_path}")
     
     path = os.path.join(full_path, file.name)
+    path = path.replace("\\", "/") # only for windows
     
+    print(f"path : {path}")
     if file.file_type.startswith('image'):
         type = 'image'
     elif file.file_type.split('/')[-1] == 'pdf':
