@@ -55,3 +55,4 @@ def create_root_folder(username: str, user: User) -> None:
     os.makedirs(user_dir)
     Folder.objects.create(name=username, owner=user)
     return
+

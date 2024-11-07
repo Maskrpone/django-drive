@@ -26,8 +26,6 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     
     # We list the content of the current folder 
     folders_name = [name for name in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, name))]
-
-    
     
     folders = []  
     for folder in folders_name:
@@ -35,7 +33,7 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
         print(f"parent id {parent_id.id}")
         actual_folder = Folder.objects.get(name=folder, parent=parent_id, owner=request.user)
         
-        folders.append({"name": folder, "elts": actual_folder.number_of_elements, "last_updated": actual_folder.last_updated})
+        folders.append({"name": folder, "elts": actual_folder.number_of_elements, "last_updated": actual_folder.last_updated, "id": actual_folder.id})
     
     files_name = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
     

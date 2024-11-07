@@ -1,5 +1,6 @@
 import os
 import mimetypes
+import pymupdf
 from PIL import Image
 from pdf2image import convert_from_path
 from io import BytesIO
@@ -40,13 +41,13 @@ def upload_file(request: HttpRequest) -> HttpResponse:
         form = FileUploadForm(request.POST, request.FILES) # We get the form to check if it is valid
         path = request.POST.get("current_path") # We get the current path (where we want to place the uploaded file)
         base_dir = os.path.join(settings.MEDIA_ROOT, request.user.username) # We form the root directory of the actual user
-        
+        print(f"base dir : {base_dir}")
         # If our path is different from the root, we constitute it
         if path:
            folder_path = os.path.join(base_dir, path)
         else:
            folder_path = base_dir
-        
+        print(f"folder path : {folder_path}")
         os.makedirs(folder_path, exist_ok=True) # ensures that our target folder exists
         
         # We must make sure that our form is valid before trying to upload the file
@@ -57,11 +58,19 @@ def upload_file(request: HttpRequest) -> HttpResponse:
             if uploaded_file.size > 40 * 1024 * 1024:
                 return HttpResponseBadRequest("File size exceeds 40MB limit")
             print(f'passed the size')
+            
             # We check if the allocated size (100 Mo) for a user is exceeded or not 
             user_used_capacity = get_user_folder_size(request.user)
             if user_used_capacity + uploaded_file.size > MAX_STORAGE_LIMIT:
                 return HttpResponseBadRequest("Storage limit of 100MB exceeded")
             
+            all_files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
+            
+            while uploaded_file.name in all_files:
+                uploaded_file.name = f'copy_{uploaded_file.name}'
+                all_files = [name for name in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, name))]
+            
+            print(f'new name : {uploaded_file.name}')
             # Prepare metadata for registration into the database
             parent_folder = get_parent_folder(folder_path, request.user)
             size = uploaded_file.size / 1024 # Get the size in Ko
@@ -75,7 +84,7 @@ def upload_file(request: HttpRequest) -> HttpResponse:
                 file_type = 'unknown'
             item = File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
             
-            create_thumbnail(uploaded_file, item, request.user)
+            create_thumbnail(uploaded_file, item, request.user, folder_path)
             
             parent_folder.number_of_elements += 1
             parent_folder.last_updated = timezone.now().date()
@@ -103,7 +112,7 @@ def get_user_folder_size(user: User) -> int:
     print(f"actual used space for {user} : {actual_used_capacity}")
     return actual_used_capacity
 
-def create_thumbnail(uploaded_file, file_db: File, user: User):
+def create_thumbnail(uploaded_file, file_db: File, user: User, folder_path: str):
     print(f'{file_db.file_type.split("/")[-1]}')
     if file_db.file_type.split("/")[0] == "image":
         image = Image.open(uploaded_file)
@@ -125,14 +134,19 @@ def create_thumbnail(uploaded_file, file_db: File, user: User):
         return
     
     if file_db.file_type.split('/')[-1] == "pdf":
-        parent_path = str(file_db.parent)
-        full_path = os.path.join(settings.MEDIA_ROOT, parent_path)
-        pdf_path = os.path.join(full_path, file_db.name)
-        print(f'{pdf_path}')
         
-        image = convert_from_path(pdf_path, first_page=0, last_page=1)[0]
-        image.thumbnail((150,150))
+        pdf_path = os.path.join(folder_path, uploaded_file.name)
+        print(f'folder path : {pdf_path}')
         
+        pdf = pymupdf.open(pdf_path)
+        
+        page = pdf.load_page(0)
+        
+        image = page.get_pixmap()
+        
+        image = Image.frombytes("RGB", [image.width, image.height], image.samples)
+        image.thumbnail((150, 150))
+
         thumb_IO = BytesIO()
         image.save(thumb_IO, format='PNG')
 
