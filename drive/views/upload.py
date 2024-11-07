@@ -2,7 +2,6 @@ import os
 import mimetypes
 import pymupdf
 from PIL import Image
-from pdf2image import convert_from_path
 from io import BytesIO
 from django.shortcuts import redirect
 from django.conf import settings
@@ -84,7 +83,7 @@ def upload_file(request: HttpRequest) -> HttpResponse:
                 file_type = 'unknown'
             item = File.objects.create(name=uploaded_file.name, size=size, owner=request.user, parent_id=parent_folder.id, file_type=file_type)
             
-            create_thumbnail(uploaded_file, item, request.user, folder_path)
+            create_thumbnail(item, request.user, folder_path, uploaded_file)
             
             parent_folder.number_of_elements += 1
             parent_folder.last_updated = timezone.now().date()
@@ -112,7 +111,15 @@ def get_user_folder_size(user: User) -> int:
     print(f"actual used space for {user} : {actual_used_capacity}")
     return actual_used_capacity
 
-def create_thumbnail(uploaded_file, file_db: File, user: User, folder_path: str):
+def create_thumbnail(file_db: File, user: User, folder_path: str, uploaded_file=None) -> None:
+    """Function to create document thumbnails (image, pdf and maybe video)
+
+    Args:
+        file_db (File): File object (db)
+        user (User): User object (db)
+        folder_path (str): folder path
+        uploaded_file (_type_): (optionnal) the uploaded file
+    """
     print(f'{file_db.file_type.split("/")[-1]}')
     if file_db.file_type.split("/")[0] == "image":
         image = Image.open(uploaded_file)

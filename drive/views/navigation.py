@@ -1,10 +1,12 @@
 import os
+import mimetypes
 from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from ..forms import FileUploadForm
 from ..models import Folder, File, Thumbnail
 from drive.views.folder import get_parent_folder
+from drive.views.upload import create_thumbnail
 
 def home(request: HttpRequest, path:str="") -> HttpResponse:
     """This is the base view for navigating through the drive."""
@@ -19,7 +21,7 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     
     # If we can't find the specified path, we raise a 404
     if not os.path.exists(folder_path):
-        raise Http404("Dossier non trouvé")
+        return redirect('drive_root')
     
     # we will need it later
     parent_id = get_parent_folder(folder_path, request.user)
@@ -39,7 +41,14 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     
     files = []
     for file in files_name:
-        actual_file = File.objects.get(name=file, parent=parent_id, owner=request.user)
+        try:
+            actual_file = File.objects.get(name=file, parent=parent_id, owner=request.user)
+        except File.DoesNotExist:
+            type,_ = mimetypes.guess_type(file)
+            actual_file = File.objects.create(name=file, parent=parent_id, owner=request.user, size=os.path.getsize(os.path.join(folder_path, file)), file_type=type)
+            # create_thumbnail(actual_file, request.user, folder_path, file)
+            continue
+        
         if len(Thumbnail.objects.filter(file=actual_file)) == 1:
             thumbnail_name = Thumbnail.objects.get(file=actual_file).image
         else:
@@ -60,7 +69,7 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
         'files': files,
         'current_path': f'{path}',
         'breadcrumbs': breadcrumbs,
-        'form': FileUploadForm
+        'form': FileUploadForm,
     })
     
     

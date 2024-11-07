@@ -1,6 +1,6 @@
 import os
 from django.shortcuts import redirect
-from drive.models import File, Folder
+from drive.models import File, Folder, Thumbnail
 from django.conf import settings
 import shutil
 
@@ -27,7 +27,17 @@ def delete_file(request):
         print(f"file path : {file_path}")
         if os.path.exists(file_path):
             os.remove(file_path)
-            parent_folder.number_of_elements -= 1
+            if parent_folder.number_of_elements > 0:
+                parent_folder.number_of_elements -= 1
+            
+            try:
+                thumbnail = Thumbnail.objects.get(file=file)
+                os.remove(os.path.join(settings.BASE_DIR, 'thumbnails', thumbnail.image))
+                
+                thumbnail.delete()  
+            except Thumbnail.DoesNotExist or os.error:
+                pass
+            
             file.delete()
             parent_folder.save()
         
