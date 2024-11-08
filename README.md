@@ -73,4 +73,17 @@ In this application, you will find the following features :
 | Redirection           | If not authenticated, you will be redirected to the login page                                                                                                                                                                                                                                                                        | ✅     |
 | File view             | By clicking on files, you can view them exclusively (you can also play videos, view pdfs ...). Attention for pdf : Embedded pdfs viewer may not work, a popup request can be displayed for you to allow. The pdf will then load in an external window. If a file can't be read, a download link will be issued for you to download it | ✅     |
 
-## Screenshots
+### Manual uploading of files (or folders!)
+
+You can also manually put files or folders (with or without elements inside) in your `storage/<username>`. When navigating to them on the web app, the drive will update its database to add all changements. (you might need to refresh 2 times the page)
+
+## Screenshares
+
+You will find on this [google drive](https://drive.google.com/drive/folders/1Xr8TNg6YbtU5abF8pogqT57gnlRKrhhG?usp=sharing) overviews of features of this project.
+
+If you have any question, feal free to contact us.
+
+Hippolyte DEPARIS
+Inès PINGAULT
+Anaëlle MAZOUNI
+Élina ROSEMBERG

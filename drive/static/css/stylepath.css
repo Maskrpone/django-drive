@@ -20,14 +20,12 @@
   padding-right: auto;
 }
 
-
 .header-icon {
   fill: #ffffff; /* Change this to your desired color */
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */
   display: block;
-
-  
+  margin-right: 20px;
 }
 
 .header-chart {
@@ -36,29 +34,32 @@
   height: 24px; /* Adjust the size as needed */
   display: block;
   margin-left: 1000px;
-  
+  margin-right: 10px;
+}
+
+.path {
+  display: flex;
+  width: 100%;
 }
 
 .breadcrumb-key {
   display: inline; /* Change display to inline to keep elements in the same line */
-  font-weight: bold; 
-  font-size: 1.0em; 
+  font-weight: bold;
+  font-size: 1em;
   text-decoration: none;
   font-family: "Quicksand", sans-serif;
   font-optical-sizing: auto;
   font-style: bold;
   color: #f8f7fc;
-
- 
 }
 
 .breadcrumb-key::after {
-  content: '>'; /* Ajoute un séparateur après chaque élément */
-  color: #f8f7fc; 
+  content: ">"; /* Ajoute un séparateur après chaque élément */
+  color: #f8f7fc;
 }
 
 .breadcrumb-key:last-child::after {
-  content: ''; /* Supprime le séparateur après le dernier élément */
+  content: ""; /* Supprime le séparateur après le dernier élément */
 }
 
 body {
@@ -66,13 +67,10 @@ body {
   font-family: sans-serif;
 }
 
-
-
 .header .menu .nav li:hover::after,
 .header .menu .nav li.active::after {
   transform: scale(1);
 }
-
 
 .header .controls {
   display: flex;
@@ -113,7 +111,28 @@ body {
   font-weight: bold;
   gap: 8px;
 }
-
+.logout {
+  background-color: rgba(128, 128, 128, 0.5);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  padding: 5px 10px;
+}
+.Delete{
+  background-color: rgba(0, 0, 255, 0.5);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  padding: 5px 10px;
+}
 .new-button svg {
   fill: white;
   width: 15px;
@@ -139,15 +158,18 @@ body {
   overflow: hidden;
   z-index: 1;
   min-width: 150px;
+  transform: translate(-50%, 0);
+  
 }
 
 .dropdown-item,
 .dropdown-item2 {
   display: block;
-  padding: 10px;
+  padding: 20px;
   text-decoration: none;
   color: #333;
   font-size: 0.9em;
+
 }
 
 .dropdown-item:hover,
@@ -417,7 +439,6 @@ body {
 }
 
 .file-link {
-  
   display: flex;
   overflow: hidden;
   flex-direction: column;

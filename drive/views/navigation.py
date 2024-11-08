@@ -33,7 +33,11 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     for folder in folders_name:
         print(f"Trying for folder {folder}")
         print(f"parent id {parent_id.id}")
-        actual_folder = Folder.objects.get(name=folder, parent=parent_id, owner=request.user)
+        try: 
+            actual_folder = Folder.objects.get(name=folder, parent=parent_id, owner=request.user)
+        except Folder.DoesNotExist:
+            actual_folder = Folder.objects.create(name=folder, parent=parent_id, owner=request.user)
+            continue
         
         folders.append({"name": folder, "elts": actual_folder.number_of_elements, "last_updated": actual_folder.last_updated, "id": actual_folder.id})
     
@@ -46,7 +50,6 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
         except File.DoesNotExist:
             type,_ = mimetypes.guess_type(file)
             actual_file = File.objects.create(name=file, parent=parent_id, owner=request.user, size=os.path.getsize(os.path.join(folder_path, file)), file_type=type)
-            # create_thumbnail(actual_file, request.user, folder_path, file)
             continue
         
         if len(Thumbnail.objects.filter(file=actual_file)) == 1:
@@ -73,13 +76,13 @@ def home(request: HttpRequest, path:str="") -> HttpResponse:
     })
     
     
-def get_breadcrumbs(path: str) -> dict:
+def get_breadcrumbs(path: str) -> list:
     """Used to get a dictionnary with links to all the nested folders of the current path"""
     path = path.strip('/').split('/')
-    breadcrumbs = {}
+    breadcrumbs = []
     accumulated_path = ""
     for part in path:
         accumulated_path = f'{os.path.join(accumulated_path, part)}/'
-        breadcrumbs[part] = accumulated_path
+        breadcrumbs.append((part, accumulated_path))
     
     return breadcrumbs
