@@ -57,6 +57,8 @@ To start the drive, you will have to run the following command :
 python manage.py runserver
 ```
 
+With the initial database, you should already have a functionning user named `Demo` with password `Demo1234!`.
+
 ## Usage
 
 In this application, you will find the following features :
